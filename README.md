@@ -1,2 +1,2 @@
-# ADWDV
-Adventure Works Data Vault implementation
+# Adventure Works Data Vault
+Adventure Works Data Vault implementation in the cloud
