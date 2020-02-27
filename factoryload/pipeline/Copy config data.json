@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "dataflow1",
+				"name": "LoadProcess",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
