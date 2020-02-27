@@ -1,0 +1,32 @@
+{
+	"name": "LoadProcess",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Config",
+						"type": "DatasetReference"
+					},
+					"name": "config"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Process",
+						"type": "DatasetReference"
+					},
+					"name": "Process"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Select1"
+				}
+			],
+			"script": "source(output(\n\t\tschema_name as string,\n\t\ttable_name as string,\n\t\tpk_name as string,\n\t\tcolumns as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> config\nconfig select(mapColumn(\n\t\ttable_name,\n\t\tBusinessKeys = pk_name,\n\t\tHashDiff = columns\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(input(\n\t\tTableName as string,\n\t\tBusinessKeys as string,\n\t\tHASHDIFFValues as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tmapColumn(\n\t\tTableName = table_name,\n\t\tBusinessKeys,\n\t\tHASHDIFFValues = HashDiff\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Process"
+		}
+	}
+}
