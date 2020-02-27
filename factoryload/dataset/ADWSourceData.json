@@ -5,6 +5,12 @@
 			"referenceName": "AzureDataVaultSource",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"tableName": {
+				"type": "string",
+				"defaultValue": "TableName"
+			}
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": []
