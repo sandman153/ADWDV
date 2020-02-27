@@ -113,12 +113,12 @@
 				}
 			}
 		],
-		"parameters": {
-			"TableNme": {
-				"type": "array"
+		"variables": {
+			"TableName": {
+				"type": "Array"
 			},
 			"BKey": {
-				"type": "array"
+				"type": "Array"
 			}
 		},
 		"annotations": []
