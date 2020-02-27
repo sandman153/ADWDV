@@ -136,10 +136,10 @@
 		],
 		"variables": {
 			"TableName": {
-				"type": "Array"
+				"type": "String"
 			},
 			"BKey": {
-				"type": "Array"
+				"type": "String"
 			}
 		},
 		"annotations": []
