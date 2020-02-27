@@ -27,7 +27,7 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "ForEachTable",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -69,21 +69,26 @@
 									"referenceName": "ADWSourceData",
 									"type": "DatasetReference",
 									"parameters": {
-										"tableName": "TableName"
+										"tableName": {
+											"value": "@item().TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							]
-						},
-						{
-							"name": "Set variable1",
-							"type": "SetVariable",
-							"dependsOn": [],
-							"userProperties": []
 						}
 					]
 				}
 			}
 		],
+		"variables": {
+			"Table": {
+				"type": "String"
+			},
+			"Bkey": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
