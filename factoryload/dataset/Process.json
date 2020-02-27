@@ -1,0 +1,29 @@
+{
+	"name": "Process",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Adventure Works Data Vault",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "TableName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BusinessKeys",
+				"type": "nvarchar"
+			},
+			{
+				"name": "HASHDIFFValues",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "config",
+			"table": "Process"
+		}
+	}
+}
