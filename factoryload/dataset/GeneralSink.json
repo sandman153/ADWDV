@@ -1,0 +1,33 @@
+{
+	"name": "GeneralSink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADWStage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SinkName": {
+				"type": "string",
+				"defaultValue": "SinkName"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "adwstage"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "BusinessEntityID|PersonType|NameStyle|Title|FirstName|MiddleName|LastName|Suffix|EmailPromotion|AdditionalContactInfo|Demographics|rowguid|ModifiedDate",
+				"type": "String"
+			}
+		]
+	}
+}
