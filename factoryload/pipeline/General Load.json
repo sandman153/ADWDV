@@ -115,10 +115,10 @@
 		],
 		"parameters": {
 			"TableNme": {
-				"type": "string"
+				"type": "array"
 			},
 			"BKey": {
-				"type": "string"
+				"type": "array"
 			}
 		},
 		"annotations": []
