@@ -110,7 +110,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"SinkName": {
-											"value": "@variables('TableName')",
+											"value": "@{variables('TableName')}.csv",
 											"type": "Expression"
 										}
 									}
