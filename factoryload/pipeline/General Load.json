@@ -63,7 +63,7 @@
 								},
 								{
 									"name": "Destination",
-									"value": "adwstage//@{pipeline().parameters.TableNme}.csv"
+									"value": "adwstage//@{variables('TableName')}.csv"
 								}
 							],
 							"typeProperties": {
@@ -102,7 +102,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"SinkName": {
-											"value": "@pipeline().parameters.TableNme",
+											"value": "@variables('TableName')",
 											"type": "Expression"
 										}
 									}
