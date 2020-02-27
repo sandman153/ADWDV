@@ -1,0 +1,40 @@
+{
+	"name": "Config",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADWStage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Table_Structure_config.csv",
+				"container": "adwstage"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "schema_name",
+				"type": "String"
+			},
+			{
+				"name": "table_name",
+				"type": "String"
+			},
+			{
+				"name": "pk_name",
+				"type": "String"
+			},
+			{
+				"name": "columns",
+				"type": "String"
+			}
+		]
+	}
+}
