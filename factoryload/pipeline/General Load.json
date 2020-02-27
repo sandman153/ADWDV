@@ -56,7 +56,12 @@
 								"secureOutput": false,
 								"secureInput": false
 							},
-							"userProperties": [],
+							"userProperties": [
+								{
+									"name": "Source",
+									"value": "."
+								}
+							],
 							"typeProperties": {
 								"source": {
 									"type": "AzureSqlSource",
@@ -81,12 +86,12 @@
 				}
 			}
 		],
-		"variables": {
-			"Table": {
-				"type": "String"
+		"parameters": {
+			"TableNme": {
+				"type": "string"
 			},
-			"Bkey": {
-				"type": "String"
+			"BKey": {
+				"type": "string"
 			}
 		},
 		"annotations": []
