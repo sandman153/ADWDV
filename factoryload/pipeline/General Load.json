@@ -59,13 +59,28 @@
 							"userProperties": [
 								{
 									"name": "Source",
-									"value": "."
+									"value": "dbo.@{item().TableName}"
+								},
+								{
+									"name": "Destination",
+									"value": "adwstage//@{pipeline().parameters.TableNme}.csv"
 								}
 							],
 							"typeProperties": {
 								"source": {
 									"type": "AzureSqlSource",
 									"queryTimeout": "02:00:00"
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
 								},
 								"enableStaging": false
 							},
@@ -76,6 +91,18 @@
 									"parameters": {
 										"tableName": {
 											"value": "@item().TableName",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "GeneralSink",
+									"type": "DatasetReference",
+									"parameters": {
+										"SinkName": {
+											"value": "@pipeline().parameters.TableNme",
 											"type": "Expression"
 										}
 									}

@@ -16,6 +16,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().SinkName",
+					"type": "Expression"
+				},
 				"container": "adwstage"
 			},
 			"columnDelimiter": ",",
