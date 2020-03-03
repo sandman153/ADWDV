@@ -18,6 +18,36 @@
 					"url": "https://prod-30.australiaeast.logic.azure.com:443/workflows/c5d5f0ef5dc141ca8cea66e35c55782a/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=e6YAQr5h-jsvqUI0f8Wfg5YnykZ3s0pB3AeEBk0O_n8",
 					"method": "GET"
 				}
+			},
+			{
+				"name": "LoadProcess",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "TransformExcelData",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "LoadProcess",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					}
+				}
 			}
 		],
 		"annotations": []
