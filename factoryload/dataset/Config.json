@@ -20,7 +20,27 @@
 		},
 		"schema": [
 			{
-				"name": "SalesSalesTerritoryPK_SalesTerritory_TerritoryIDTerritoryIDSalesTerritoryHUBPK_SalesTerritory_TerritoryIDSAT",
+				"name": "SchemaName",
+				"type": "String"
+			},
+			{
+				"name": "table_name",
+				"type": "String"
+			},
+			{
+				"name": "pk_name",
+				"type": "String"
+			},
+			{
+				"name": "columnd",
+				"type": "String"
+			},
+			{
+				"name": "HubName",
+				"type": "String"
+			},
+			{
+				"name": "SATname",
 				"type": "String"
 			}
 		]
