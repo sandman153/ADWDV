@@ -101,7 +101,10 @@
 											"value": "@item().TableName",
 											"type": "Expression"
 										},
-										"schemaName": "SchemaName"
+										"schemaName": {
+											"value": "@item().SchemaName",
+											"type": "Expression"
+										}
 									}
 								}
 							],
