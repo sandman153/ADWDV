@@ -9,6 +9,10 @@
 			"tableName": {
 				"type": "string",
 				"defaultValue": "TableName"
+			},
+			"schemaName": {
+				"type": "string",
+				"defaultValue": "schema_name"
 			}
 		},
 		"annotations": [],
