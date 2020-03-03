@@ -13,7 +13,7 @@
 				"fileName": "config.csv",
 				"container": "adwstage"
 			},
-			"columnDelimiter": "|",
+			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
