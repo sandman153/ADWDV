@@ -10,29 +10,17 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "Table_Structure_config.csv",
+				"fileName": "config.csv",
 				"container": "adwstage"
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": "|",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
 		"schema": [
 			{
-				"name": "schema_name",
-				"type": "String"
-			},
-			{
-				"name": "table_name",
-				"type": "String"
-			},
-			{
-				"name": "pk_name",
-				"type": "String"
-			},
-			{
-				"name": "columns",
+				"name": "SalesSalesTerritoryPK_SalesTerritory_TerritoryIDTerritoryIDSalesTerritoryHUBPK_SalesTerritory_TerritoryIDSAT",
 				"type": "String"
 			}
 		]
