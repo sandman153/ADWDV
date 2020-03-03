@@ -17,17 +17,7 @@
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": [
-			{
-				"name": "PersonVID",
-				"type": "nvarchar"
-			},
-			{
-				"name": "BusinessEntityID",
-				"type": "bigint",
-				"precision": 19
-			}
-		],
+		"schema": [],
 		"typeProperties": {
 			"schema": {
 				"value": "@dataset().schemaName",
