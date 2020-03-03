@@ -1,0 +1,32 @@
+{
+	"name": "ADVHubs_copy1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Adventure Works Data Vault",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"schemaName": {
+				"type": "string",
+				"defaultValue": "SchemaName"
+			},
+			"SatName": {
+				"type": "string",
+				"defaultValue": "SatName"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().schemaName",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().HubName",
+				"type": "Expression"
+			}
+		}
+	}
+}
