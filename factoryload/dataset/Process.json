@@ -19,6 +19,18 @@
 			{
 				"name": "HASHDIFFValues",
 				"type": "nvarchar"
+			},
+			{
+				"name": "SCHEMAName",
+				"type": "varchar"
+			},
+			{
+				"name": "HubTable",
+				"type": "varchar"
+			},
+			{
+				"name": "SatName",
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {
