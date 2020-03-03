@@ -12,7 +12,7 @@
 			},
 			"schemaName": {
 				"type": "string",
-				"defaultValue": "schema_name"
+				"defaultValue": "SchemaName"
 			}
 		},
 		"annotations": [],
@@ -20,7 +20,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": {
-				"value": "dbo",
+				"value": "@dataset().schemaName",
 				"type": "Expression"
 			},
 			"table": {
