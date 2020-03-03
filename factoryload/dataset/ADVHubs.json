@@ -1,0 +1,22 @@
+{
+	"name": "ADVHubs",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Adventure Works Data Vault",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"schemaName": {
+				"type": "string",
+				"defaultValue": "SchemaName"
+			},
+			"HubName": {
+				"type": "string",
+				"defaultValue": "HubName"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
