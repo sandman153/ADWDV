@@ -20,7 +20,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "PersonHUB"
+			"table": ""
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
