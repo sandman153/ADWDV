@@ -130,63 +130,6 @@
 									"type": "Expression"
 								}
 							}
-						},
-						{
-							"name": "PersonDVLoad_copy1",
-							"type": "ExecuteDataFlow",
-							"dependsOn": [
-								{
-									"activity": "Copy Data",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
-							"policy": {
-								"timeout": "7.00:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"dataflow": {
-									"referenceName": "PersonDVLoad_copy1",
-									"type": "DataFlowReference",
-									"parameters": {
-										"bkey": {
-											"value": "'@{item().BKey}'",
-											"type": "Expression"
-										},
-										"hubname": {
-											"value": "'@{item().HubName}'",
-											"type": "Expression"
-										},
-										"satname": {
-											"value": "'@{item().SatName}'",
-											"type": "Expression"
-										}
-									},
-									"datasetParameters": {
-										"DVSource": {
-											"SinkName": "SinkName"
-										},
-										"HUBPerson": {
-											"hubname": "HubName",
-											"schemaName": "dbo"
-										},
-										"SinkHubPerson": {
-											"hubname": "HubName",
-											"schemaName": "dbo"
-										}
-									}
-								},
-								"compute": {
-									"coreCount": 8,
-									"computeType": "General"
-								}
-							}
 						}
 					]
 				}
