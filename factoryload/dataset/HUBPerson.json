@@ -29,8 +29,14 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "dbo",
-			"table": ""
+			"schema": {
+				"value": "@dataset().schemaName",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().hubname",
+				"type": "Expression"
+			}
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
