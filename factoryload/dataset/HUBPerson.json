@@ -17,17 +17,7 @@
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": [],
-		"typeProperties": {
-			"schema": {
-				"value": "@dataset().schemaName",
-				"type": "Expression"
-			},
-			"table": {
-				"value": "@dataset().hubname",
-				"type": "Expression"
-			}
-		}
+		"schema": []
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
