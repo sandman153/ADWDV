@@ -17,6 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT [TableName]\n      ,[BusinessKeys]\n      ,[HASHDIFFValues]\n      ,[SCHEMAName]\n      ,[HubTable]\n      ,[SatName]\n  FROM [config].[Process]\n  WHERE Process.SCHEMAName = 'Person' AND Process.TableName = 'Person'",
 						"queryTimeout": "02:00:00"
 					},
 					"dataset": {
