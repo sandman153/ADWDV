@@ -172,7 +172,7 @@
 										},
 										"HUBPerson": {
 											"hubname": {
-												"value": "@item().HubName",
+												"value": "@item().HubTable",
 												"type": "Expression"
 											},
 											"schemaName": "dbo"
