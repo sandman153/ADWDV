@@ -17,7 +17,17 @@
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": [],
+		"schema": [
+			{
+				"name": "PersonVID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BusinessEntityID",
+				"type": "bigint",
+				"precision": 19
+			}
+		],
 		"typeProperties": {
 			"schema": "dbo",
 			"table": "PersonHUB"
