@@ -17,7 +17,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": {
-					"value": "@dataset().SinkName",
+					"value": "@{dataset().SinkName}.csv",
 					"type": "Expression"
 				},
 				"container": "adwstage"
