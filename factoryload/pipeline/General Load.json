@@ -169,13 +169,13 @@
 												"value": "@item().HubName",
 												"type": "Expression"
 											},
-											"schemaName": {
-												"value": "@item().schema_name",
-												"type": "Expression"
-											}
+											"schemaName": "dbo"
 										},
 										"SinkHubPerson": {
-											"hubname": "HubName",
+											"hubname": {
+												"value": "@item().SATName",
+												"type": "Expression"
+											},
 											"schemaName": "dbo"
 										}
 									}
