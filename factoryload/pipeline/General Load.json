@@ -159,7 +159,7 @@
 									"type": "DataFlowReference",
 									"parameters": {
 										"bkey": {
-											"value": "'@{item().Bkey}'",
+											"value": "'@{item().BusinessKeys}'",
 											"type": "Expression"
 										}
 									},
