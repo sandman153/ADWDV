@@ -24,6 +24,9 @@
 						"type": "DatasetReference"
 					},
 					"name": "SATPerson"
+				},
+				{
+					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -60,9 +63,12 @@
 				},
 				{
 					"name": "NewHubPerson"
+				},
+				{
+					"name": "DerivedColumn1"
 				}
 			],
-			"script": "parameters{\n\tbkey as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> DVSource\nsource(output(\n\t\tPersonVID as string,\n\t\tBusinessEntityID as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBPerson\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SATPerson\nDVSource derive() ~> hashColumns\nhashColumns, SATPerson exists(VID == SATPerson@PersonVID,\n\tnegate:true,\n\tbroadcast: 'none')~> CheckNewSatPerson\nCheckNewSatPerson alterRow(insertIf(true())) ~> NewSATRecords\nNewSATRecords select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> NewSatPerson\nhashColumns, HUBPerson exists({} == PersonVID,\n\tnegate:true,\n\tbroadcast: 'none')~> CheckNewPerson\nCheckNewPerson select(mapColumn(\n\t\tVID,\n\t\tLoad_TS\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> NewHubPerson\nNewSatPerson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tPersonVID = VID,\n\t\tLoadDateTime = Load_TS\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkSatPerson\nNewHubPerson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tPersonVID = VID,\n\t\tLoadDateTime = Load_TS\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkHubPerson"
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> DVSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBPerson\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SATPerson\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> source1\nDVSource derive(businesskey = toString(byPosition(2)),\n\t\t{} = ERROR_FUNCTION('')) ~> hashColumns\nhashColumns, SATPerson exists(VID == SATPerson@PersonVID,\n\tnegate:true,\n\tbroadcast: 'none')~> CheckNewSatPerson\nCheckNewSatPerson alterRow(insertIf(true())) ~> NewSATRecords\nNewSATRecords select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> NewSatPerson\nhashColumns, HUBPerson exists({} == PersonVID,\n\tnegate:true,\n\tbroadcast: 'none')~> CheckNewPerson\nCheckNewPerson select(mapColumn(\n\t\tVID,\n\t\tLoad_TS\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> NewHubPerson\nHUBPerson derive({} = ERROR_FUNCTION('instr(name, __SINGLE_QUOTE__ID__SINGLE_QUOTE__) > 0)')) ~> DerivedColumn1\nNewSatPerson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tPersonVID = VID,\n\t\tLoadDateTime = Load_TS\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkSatPerson\nNewHubPerson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tPersonVID = VID,\n\t\tLoadDateTime = Load_TS\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkHubPerson"
 		}
 	}
 }
