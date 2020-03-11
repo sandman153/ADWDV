@@ -16,10 +16,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": {
-					"value": "@{dataset().SinkName}.csv",
-					"type": "Expression"
-				},
+				"fileName": "Person.csv",
 				"container": "adwstage"
 			},
 			"columnDelimiter": ",",
