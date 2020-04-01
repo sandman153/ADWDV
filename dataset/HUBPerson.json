@@ -1,0 +1,27 @@
+{
+	"name": "HUBPerson",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Adventure Works Data Vault",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "PersonVID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BusinessEntityID",
+				"type": "bigint",
+				"precision": 19
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "PersonHUB"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
