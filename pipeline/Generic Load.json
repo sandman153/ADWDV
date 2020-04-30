@@ -28,6 +28,10 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@activity('Load Config').output",
+						"type": "Expression"
+					},
 					"activities": [
 						{
 							"name": "Copy data1",
