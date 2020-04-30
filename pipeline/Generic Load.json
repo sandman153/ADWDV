@@ -78,7 +78,13 @@
 							"outputs": [
 								{
 									"referenceName": "StageSource",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"sourcetable": {
+											"value": "@concat(item().SchemaName, item().TableName)",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
