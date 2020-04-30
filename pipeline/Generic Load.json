@@ -3,31 +3,11 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Load Config",
-				"type": "GetMetadata",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"dataset": {
-						"referenceName": "DVConfig",
-						"type": "DatasetReference"
-					},
-					"fieldList": []
-				}
-			},
-			{
 				"name": "LoadDV",
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Load Config",
+						"activity": "Lookup Config",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -103,6 +83,31 @@
 							]
 						}
 					]
+				}
+			},
+			{
+				"name": "Lookup Config",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"isolationLevel": "ReadUncommitted"
+					},
+					"dataset": {
+						"referenceName": "DVConfig",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
 				}
 			}
 		],
