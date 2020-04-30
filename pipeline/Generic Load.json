@@ -34,7 +34,7 @@
 					},
 					"activities": [
 						{
-							"name": "Copy data1",
+							"name": "Copy Source Data",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -44,11 +44,31 @@
 								"secureOutput": false,
 								"secureInput": false
 							},
-							"userProperties": [],
+							"userProperties": [
+								{
+									"name": "Source",
+									"value": "@{item().SchemaName}.@{item().TableName}"
+								},
+								{
+									"name": "Destination",
+									"value": "adwstage//@{'<sourcetable>'}"
+								}
+							],
 							"typeProperties": {
 								"source": {
 									"type": "AzureSqlSource",
 									"queryTimeout": "02:00:00"
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".csv"
+									}
 								},
 								"enableStaging": false
 							},
@@ -58,10 +78,20 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"schema": {
-											"value": "@activity('Load Config').output.item()",
+											"value": "@item().SchemaName",
+											"type": "Expression"
+										},
+										"table": {
+											"value": "@item().TableName",
 											"type": "Expression"
 										}
 									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "StageSource",
+									"type": "DatasetReference"
 								}
 							]
 						}
