@@ -7,7 +7,32 @@
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": [],
+		"schema": [
+			{
+				"name": "TableName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BusinessKeys",
+				"type": "nvarchar"
+			},
+			{
+				"name": "HASHDIFFValues",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SCHEMAName",
+				"type": "varchar"
+			},
+			{
+				"name": "HubTable",
+				"type": "varchar"
+			},
+			{
+				"name": "SatName",
+				"type": "varchar"
+			}
+		],
 		"typeProperties": {
 			"schema": "config",
 			"table": "Process"
