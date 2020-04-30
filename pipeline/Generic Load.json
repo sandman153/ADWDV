@@ -13,7 +13,14 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DVConfig",
+						"type": "DatasetReference"
+					},
+					"fieldList": []
+				}
 			},
 			{
 				"name": "LoadDV",
