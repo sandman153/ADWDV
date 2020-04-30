@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Load Config').output.value",
+						"value": "@activity('Lookup Config').output.value",
 						"type": "Expression"
 					},
 					"activities": [
