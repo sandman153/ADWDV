@@ -1,0 +1,12 @@
+{
+	"name": "DVConfig",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Adventure Works Data Vault",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
