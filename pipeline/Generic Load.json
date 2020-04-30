@@ -29,7 +29,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Load Config').output",
+						"value": "@activity('Load Config').output.value",
 						"type": "Expression"
 					},
 					"activities": [
