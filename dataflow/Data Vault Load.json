@@ -23,10 +23,10 @@
 			],
 			"transformations": [
 				{
-					"name": "DerivedColumn1"
+					"name": "hashKeys"
 				}
 			],
-			"script": "parameters{\n\thubName as string,\n\tsatName as string,\n\thashVal as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['*']) ~> DataVaultSource\nDataVaultSource derive(each(match(name == '$hubName'), $hubName+'' = ERROR_FUNCTION(''))) ~> DerivedColumn1\nDerivedColumn1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> HubLoad"
+			"script": "parameters{\n\thubName as string,\n\tsatName as string,\n\thashVal as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['*']) ~> DataVaultSource\nDataVaultSource derive(each(match(name == '$hubName'), regexReplace($hubName, 'ID', 'VID') = sha2(256, byName($hashVal)))) ~> hashKeys\nhashKeys sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> HubLoad"
 		}
 	}
 }

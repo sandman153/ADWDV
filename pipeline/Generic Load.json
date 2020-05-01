@@ -119,13 +119,17 @@
 										"satName": {
 											"value": "'@{item().SatName}'",
 											"type": "Expression"
+										},
+										"hashVal": {
+											"value": "'@{item().HASHDIFFValues}'",
+											"type": "Expression"
 										}
 									},
 									"datasetParameters": {
-										"source1": {
+										"DataVaultSource": {
 											"sourcetable": "source"
 										},
-										"sink1": {
+										"HubLoad": {
 											"schemaName": "dbo",
 											"hubName": "hubName"
 										}
