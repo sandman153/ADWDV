@@ -127,8 +127,7 @@
 									},
 									"datasetParameters": {
 										"DataVaultSource": {
-											"schemaName": "dbo",
-											"hubName": "hubName"
+											"sourcetable": "source"
 										},
 										"HUBSource": {
 											"schemaName": "dbo",
