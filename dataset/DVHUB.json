@@ -12,7 +12,7 @@
 			},
 			"tableName": {
 				"type": "string",
-				"defaultValue": "table"
+				"defaultValue": "hubName"
 			}
 		},
 		"annotations": [],
