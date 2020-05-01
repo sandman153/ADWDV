@@ -10,7 +10,7 @@
 				"type": "string",
 				"defaultValue": "dbo"
 			},
-			"tableName": {
+			"hubName": {
 				"type": "string",
 				"defaultValue": "hubName"
 			}
