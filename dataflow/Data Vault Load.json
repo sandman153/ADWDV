@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "StageSource",
+						"referenceName": "DVHUB",
 						"type": "DatasetReference"
 					},
 					"name": "DataVaultSource"
@@ -42,7 +42,7 @@
 					"name": "Exists1"
 				}
 			],
-			"script": "parameters{\n\thubName as string,\n\tsatName as string,\n\thashVal as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\trowUrlColumn: 'SourceFile',\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['*']) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nDataVaultSource derive(each(match(name == '$hubName'), regexReplace($hashVal, 'ID', 'VID') = sha2(256, byName($hashVal)))) ~> hashKeys\nhashKeys select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectHubCols\nExists1 alterRow() ~> AlterRow1\nSelectHubCols, DataVaultSource exists(ERROR_FUNCTION('') == ERROR_FUNCTION('')\n\t&& ERROR_FUNCTION('') == ERROR_FUNCTION('')\n\t&& ERROR_FUNCTION('') == ERROR_FUNCTION(''),\n\tnegate:true,\n\tbroadcast: 'auto')~> Exists1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> HubLoad"
+			"script": "parameters{\n\thubName as string,\n\tsatName as string,\n\thashVal as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\trowUrlColumn: 'SourceFile',\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\twildcardPaths:['*']) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nDataVaultSource derive(each(match(name == '$hubName'), 'hashKey' = sha2(256, byName($hashVal)))) ~> hashKeys\nhashKeys select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectHubCols\nExists1 alterRow() ~> AlterRow1\nSelectHubCols, DataVaultSource exists(ERROR_FUNCTION(''),\n\tnegate:true,\n\tbroadcast: 'auto')~> Exists1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> HubLoad"
 		}
 	}
 }
