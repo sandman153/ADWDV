@@ -9,20 +9,36 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "TableName",
+				"name": "@odata.etag",
 				"type": "nvarchar"
 			},
 			{
-				"name": "BusinessKeys",
-				"type": "nvarchar"
-			},
-			{
-				"name": "HASHDIFFValues",
+				"name": "ItemInternalId",
 				"type": "nvarchar"
 			},
 			{
 				"name": "SCHEMAName",
 				"type": "varchar"
+			},
+			{
+				"name": "TableName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "pk_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SourceID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TargetID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "HashColDiff",
+				"type": "nvarchar"
 			},
 			{
 				"name": "HubTable",
