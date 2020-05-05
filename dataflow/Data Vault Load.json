@@ -33,19 +33,16 @@
 					"name": "hashKeys"
 				},
 				{
-					"name": "SelectHubCols"
-				},
-				{
 					"name": "AlterRow1"
 				},
 				{
 					"name": "Exists1"
 				},
 				{
-					"name": "TargetHubID"
+					"name": "DerivedColumn1"
 				}
 			],
-			"script": "parameters{\n\thubName as string,\n\tsatName as string,\n\thashVal as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['*']) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nDataVaultSource derive(hashID = sha2(256, byName($hashVal))) ~> hashKeys\nhashKeys select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectHubCols\nExists1 alterRow() ~> AlterRow1\nSelectHubCols, DataVaultSource exists(hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> Exists1\nHUBSource derive(targethub = ERROR_FUNCTION('')) ~> TargetHubID\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> HubLoad"
+			"script": "parameters{\n\thubName as string,\n\tsatName as string,\n\thashVal as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['*']) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nDataVaultSource derive(hashID = sha2(256, byName($hashVal))) ~> hashKeys\nExists1 alterRow() ~> AlterRow1\nhashKeys, DataVaultSource exists(ERROR_FUNCTION('hashID = DataVaultSource@hashID'),\n\tnegate:true,\n\tbroadcast: 'auto')~> Exists1\nHUBSource derive({.0532.0410.07\\41, 1440 } = ERROR_FUNCTION('')) ~> DerivedColumn1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> HubLoad"
 		}
 	}
 }
