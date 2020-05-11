@@ -140,7 +140,7 @@
 										"HUBSource": {
 											"schemaName": "dbo",
 											"hubName": {
-												"value": "@item().stageSource",
+												"value": "@item().StageSource",
 												"type": "Expression"
 											}
 										},
