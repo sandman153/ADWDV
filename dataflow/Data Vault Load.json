@@ -36,7 +36,7 @@
 					"name": "NewRows"
 				},
 				{
-					"name": "Exists1"
+					"name": "ExistRows"
 				},
 				{
 					"name": "TargetKey"
@@ -45,7 +45,7 @@
 					"name": "Select1"
 				}
 			],
-			"script": "parameters{\n\thubName as string,\n\tsatName as string,\n\thashVal as string,\n\tTargetID as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['*']) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nDataVaultSource derive(hashID = toString(sha2(256, byName($hashVal)))) ~> hashKeys\nExists1 alterRow(insertIf(true())) ~> NewRows\nhashKeys, TargetKey exists(hashKeys@hashID == TargetKey@hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> Exists1\nHUBSource derive(hashID = toString(byName($TargetID))) ~> TargetKey\nNewRows select(mapColumn(\n\t\t{$$+'VID'} = hashID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> HubLoad"
+			"script": "parameters{\n\thubName as string,\n\tsatName as string,\n\thashVal as string,\n\tTargetID as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['*']) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nDataVaultSource derive(hashID = toString(sha2(256, byName($hashVal)))) ~> hashKeys\nExistRows alterRow(insertIf(true())) ~> NewRows\nhashKeys, TargetKey exists(hashKeys@hashID == TargetKey@hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> ExistRows\nHUBSource derive(hashID = toString(byName($TargetID))) ~> TargetKey\nNewRows select(mapColumn(\n\t\t{$$+'VID'} = hashID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> HubLoad"
 		}
 	}
 }
