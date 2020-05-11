@@ -35,7 +35,92 @@
 					"sink": {
 						"type": "AzureSqlSink"
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "{\"@odata.etag\":\"\"",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SCHEMAName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "\"ItemInternalId\":\"45bac0f5-e8a4-48b9-b442-c4b0315ea4be\"",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TableName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "\"schema_name\":\"Production\"",
+									"type": "String"
+								},
+								"sink": {
+									"name": "pk_name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "\"table_name\":\"WorkOrderRouting\"",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SourceID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "\"pk_name\":\"PK_WorkOrderRouting_WorkOrderID_ProductID_OperationSequence\"",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TargetID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "\"SourceID\":\"WorkOrderID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HashColDiff",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " ProductID6",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HubTable",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " OperationSequence\"7",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SatName",
+									"type": "String"
+								}
+							}
+						]
+					}
 				},
 				"inputs": [
 					{

@@ -20,43 +20,67 @@
 		},
 		"schema": [
 			{
-				"name": "@odata.etag",
+				"name": "{\"@odata.etag\":\"\"",
 				"type": "String"
 			},
 			{
-				"name": "ItemInternalId",
+				"name": "\"ItemInternalId\":\"45bac0f5-e8a4-48b9-b442-c4b0315ea4be\"",
 				"type": "String"
 			},
 			{
-				"name": "schema_name",
+				"name": "\"schema_name\":\"Production\"",
 				"type": "String"
 			},
 			{
-				"name": "table_name",
+				"name": "\"table_name\":\"WorkOrderRouting\"",
 				"type": "String"
 			},
 			{
-				"name": "pk_name",
+				"name": "\"pk_name\":\"PK_WorkOrderRouting_WorkOrderID_ProductID_OperationSequence\"",
 				"type": "String"
 			},
 			{
-				"name": "SourceID",
+				"name": "\"SourceID\":\"WorkOrderID",
 				"type": "String"
 			},
 			{
-				"name": "TargetID",
+				"name": " ProductID6",
 				"type": "String"
 			},
 			{
-				"name": "HashColDiff",
+				"name": " OperationSequence\"7",
 				"type": "String"
 			},
 			{
-				"name": "HubName",
+				"name": "\"TargetID\":\"WorkOrderID",
 				"type": "String"
 			},
 			{
-				"name": "SATName",
+				"name": " ProductID9",
+				"type": "String"
+			},
+			{
+				"name": " OperationSequence\"10",
+				"type": "String"
+			},
+			{
+				"name": "\"HashColDiff\":\"WorkOrderID",
+				"type": "String"
+			},
+			{
+				"name": " ProductID12",
+				"type": "String"
+			},
+			{
+				"name": " OperationSequence\"13",
+				"type": "String"
+			},
+			{
+				"name": "\"HubName\":\"WorkOrderRoutingHUB\"",
+				"type": "String"
+			},
+			{
+				"name": "\"SATName\":\"PK_WorkOrderRouting_WorkOrderID_ProductID_OperationSequenceSAT\"}",
 				"type": "String"
 			}
 		]
