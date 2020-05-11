@@ -108,6 +108,58 @@
 									"type": "Expression"
 								}
 							}
+						},
+						{
+							"name": "Data Vault Load",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [
+								{
+									"activity": "Copy Source Data",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "Data Vault Load",
+									"type": "DataFlowReference",
+									"datasetParameters": {
+										"DataVaultSource": {
+											"sourcetable": {
+												"value": "@variables('st')",
+												"type": "Expression"
+											}
+										},
+										"HUBSource": {
+											"schemaName": "dbo",
+											"hubName": {
+												"value": "@item().HubTable",
+												"type": "Expression"
+											}
+										},
+										"HubLoad": {
+											"schemaName": "dbo",
+											"hubName": {
+												"value": "@item().HubTable",
+												"type": "Expression"
+											}
+										}
+									}
+								},
+								"integrationRuntime": {
+									"referenceName": "AzureDataVaultDemo",
+									"type": "IntegrationRuntimeReference"
+								}
+							}
 						}
 					]
 				}
