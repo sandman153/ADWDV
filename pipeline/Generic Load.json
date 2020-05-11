@@ -121,7 +121,11 @@
 											"type": "Expression"
 										},
 										"hashVal": {
-											"value": "'@{item().HASHDIFFValues}'",
+											"value": "'@{item().SourceID}'",
+											"type": "Expression"
+										},
+										"TargetID": {
+											"value": "'@{item().SourceID}'",
 											"type": "Expression"
 										}
 									},
