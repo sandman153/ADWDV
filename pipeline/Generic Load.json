@@ -132,15 +132,24 @@
 									},
 									"datasetParameters": {
 										"DataVaultSource": {
-											"sourcetable": "source"
+											"sourcetable": {
+												"value": "@item().table_name",
+												"type": "Expression"
+											}
 										},
 										"HUBSource": {
 											"schemaName": "dbo",
-											"hubName": "hubName"
+											"hubName": {
+												"value": "@item().stageSource",
+												"type": "Expression"
+											}
 										},
 										"HubLoad": {
 											"schemaName": "dbo",
-											"hubName": "hubName"
+											"hubName": {
+												"value": "@item.HubName()",
+												"type": "Expression"
+											}
 										}
 									}
 								},
