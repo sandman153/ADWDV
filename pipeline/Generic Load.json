@@ -248,11 +248,8 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "StageSource",
-						"type": "DatasetReference",
-						"parameters": {
-							"sourcetable": "source"
-						}
+						"referenceName": "ADWConfigSource",
+						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
