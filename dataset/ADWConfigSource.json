@@ -1,0 +1,64 @@
+{
+	"name": "ADWConfigSource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADWStage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "config.csv",
+				"container": "dvconfig"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "@odata.etag",
+				"type": "String"
+			},
+			{
+				"name": "ItemInternalId",
+				"type": "String"
+			},
+			{
+				"name": "schema_name",
+				"type": "String"
+			},
+			{
+				"name": "table_name",
+				"type": "String"
+			},
+			{
+				"name": "pk_name",
+				"type": "String"
+			},
+			{
+				"name": "SourceID",
+				"type": "String"
+			},
+			{
+				"name": "TargetID",
+				"type": "String"
+			},
+			{
+				"name": "HashColDiff",
+				"type": "String"
+			},
+			{
+				"name": "HubName",
+				"type": "String"
+			},
+			{
+				"name": "SATName",
+				"type": "String"
+			}
+		]
+	}
+}
