@@ -9,14 +9,6 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "@odata.etag",
-				"type": "nvarchar"
-			},
-			{
-				"name": "ItemInternalId",
-				"type": "nvarchar"
-			},
-			{
 				"name": "SCHEMAName",
 				"type": "varchar"
 			},
