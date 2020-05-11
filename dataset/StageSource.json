@@ -16,6 +16,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().sourcetable",
+					"type": "Expression"
+				},
 				"container": "adwstage"
 			},
 			"columnDelimiter": ",",
