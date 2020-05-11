@@ -202,13 +202,7 @@
 						"referenceName": "AzureDataVaultDemo",
 						"type": "IntegrationRuntimeReference"
 					},
-					"method": "GET",
-					"datasets": [
-						{
-							"referenceName": "DVConfig",
-							"type": "DatasetReference"
-						}
-					]
+					"method": "GET"
 				}
 			},
 			{
