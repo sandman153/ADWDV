@@ -231,8 +231,36 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
 					"enableStaging": false
-				}
+				},
+				"inputs": [
+					{
+						"referenceName": "StageSource",
+						"type": "DatasetReference",
+						"parameters": {
+							"sourcetable": "source"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DVConfig",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []
