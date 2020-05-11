@@ -133,14 +133,6 @@
 									"referenceName": "Data Vault Load",
 									"type": "DataFlowReference",
 									"parameters": {
-										"hubName": {
-											"value": "'@{item().HubTable}'",
-											"type": "Expression"
-										},
-										"satName": {
-											"value": "'@{item().SatName}'",
-											"type": "Expression"
-										},
 										"hashVal": {
 											"value": "'@{item().SourceID}'",
 											"type": "Expression"
