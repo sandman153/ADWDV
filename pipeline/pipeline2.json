@@ -41,7 +41,7 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "{\"@odata.etag\":\"\"",
+									"name": "SchemaName",
 									"type": "String"
 								},
 								"sink": {
@@ -51,7 +51,7 @@
 							},
 							{
 								"source": {
-									"name": "\"ItemInternalId\":\"45bac0f5-e8a4-48b9-b442-c4b0315ea4be\"",
+									"name": "TableName",
 									"type": "String"
 								},
 								"sink": {
@@ -61,7 +61,7 @@
 							},
 							{
 								"source": {
-									"name": "\"schema_name\":\"Production\"",
+									"name": "pk_name",
 									"type": "String"
 								},
 								"sink": {
@@ -71,7 +71,7 @@
 							},
 							{
 								"source": {
-									"name": "\"table_name\":\"WorkOrderRouting\"",
+									"name": "SourceID",
 									"type": "String"
 								},
 								"sink": {
@@ -81,7 +81,7 @@
 							},
 							{
 								"source": {
-									"name": "\"pk_name\":\"PK_WorkOrderRouting_WorkOrderID_ProductID_OperationSequence\"",
+									"name": "TargetID",
 									"type": "String"
 								},
 								"sink": {
@@ -91,7 +91,7 @@
 							},
 							{
 								"source": {
-									"name": "\"SourceID\":\"WorkOrderID",
+									"name": "HashColDiff",
 									"type": "String"
 								},
 								"sink": {
@@ -101,7 +101,7 @@
 							},
 							{
 								"source": {
-									"name": " ProductID6",
+									"name": "HubTable",
 									"type": "String"
 								},
 								"sink": {
@@ -111,7 +111,7 @@
 							},
 							{
 								"source": {
-									"name": " OperationSequence\"7",
+									"name": "SatName",
 									"type": "String"
 								},
 								"sink": {
