@@ -24,7 +24,14 @@
 						{
 							"name": "Copy Source Data",
 							"type": "Copy",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "SetSource",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "7.00:00:00",
 								"retry": 0,
@@ -82,7 +89,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourcetable": {
-											"value": "@concat(item().SchemaName, item().TableName)",
+											"value": "@variables('st')",
 											"type": "Expression"
 										}
 									}
@@ -133,14 +140,14 @@
 									"datasetParameters": {
 										"DataVaultSource": {
 											"sourcetable": {
-												"value": "@item().table_name",
+												"value": "@variables('st')",
 												"type": "Expression"
 											}
 										},
 										"HUBSource": {
 											"schemaName": "dbo",
 											"hubName": {
-												"value": "@item().StageSource",
+												"value": "@item().HubTable",
 												"type": "Expression"
 											}
 										},
@@ -156,6 +163,19 @@
 								"integrationRuntime": {
 									"referenceName": "AzureDataVaultDemo",
 									"type": "IntegrationRuntimeReference"
+								}
+							}
+						},
+						{
+							"name": "SetSource",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "st",
+								"value": {
+									"value": "@concat(item().SchemaName, item().TableName)",
+									"type": "Expression"
 								}
 							}
 						}
@@ -349,6 +369,11 @@
 				]
 			}
 		],
+		"variables": {
+			"st": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
