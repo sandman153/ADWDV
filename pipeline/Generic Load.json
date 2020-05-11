@@ -147,7 +147,7 @@
 										"HubLoad": {
 											"schemaName": "dbo",
 											"hubName": {
-												"value": "@item.HubTable",
+												"value": "@item().HubTable",
 												"type": "Expression"
 											}
 										}
