@@ -130,7 +130,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"dataflow": {
-									"referenceName": "Data Vault Load",
+									"referenceName": "DataVaultLoad",
 									"type": "DataFlowReference",
 									"parameters": {
 										"hashVal": {
