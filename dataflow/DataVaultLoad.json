@@ -1,5 +1,5 @@
 {
-	"name": "Data Vault Load",
+	"name": "DataVaultLoad",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
