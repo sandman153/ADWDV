@@ -159,7 +159,7 @@
 										"SATSource": {
 											"schema": "dbo",
 											"satname": {
-												"value": "@item().SATName",
+												"value": "@item().SatName",
 												"type": "Expression"
 											}
 										},
@@ -173,7 +173,7 @@
 										"SATLoad": {
 											"schema": "dbo",
 											"satname": {
-												"value": "@item().SATName",
+												"value": "@item().SatName",
 												"type": "Expression"
 											}
 										}
