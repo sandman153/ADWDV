@@ -169,7 +169,10 @@
 										},
 										"SATLoad": {
 											"schema": "dbo",
-											"satname": "sat"
+											"satname": {
+												"value": "@item().SATName",
+												"type": "Expression"
+											}
 										}
 									}
 								},
