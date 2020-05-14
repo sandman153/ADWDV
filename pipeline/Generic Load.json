@@ -166,6 +166,10 @@
 												"value": "@item().HubTable",
 												"type": "Expression"
 											}
+										},
+										"SATLoad": {
+											"schema": "dbo",
+											"satname": "sat"
 										}
 									}
 								},
