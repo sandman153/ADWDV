@@ -36,26 +36,32 @@
 					"name": "hashKeys"
 				},
 				{
-					"name": "NewRows"
-				},
-				{
 					"name": "ExistRows"
 				},
 				{
-					"name": "TargetKey"
+					"name": "TargetHubKey"
 				},
 				{
 					"name": "MapDrifted1",
 					"description": "Creates an explicit mapping for each drifted column"
 				},
 				{
-					"name": "Select1"
+					"name": "NewHubRecords"
 				},
 				{
 					"name": "Select2"
+				},
+				{
+					"name": "TargetSATKey"
+				},
+				{
+					"name": "SatRowsExist"
+				},
+				{
+					"name": "AlterRow1"
 				}
 			],
-			"script": "parameters{\n\thashVal as string,\n\tTargetID as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> SATSource\nDataVaultSource derive(HKey = toString(sha2(256, byName($hashVal)))) ~> hashKeys\nSelect1 alterRow(insertIf(true())) ~> NewRows\nhashKeys, TargetKey exists(HKey == hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> ExistRows\nHUBSource derive(hashID = toString(byName($TargetID))) ~> TargetKey\nExistRows derive(each(match(name=='ID'))) ~> MapDrifted1\nMapDrifted1 select(mapColumn(\n\t\tHKey,\n\t\teach(match(name==$hashVal))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nhashKeys select(mapColumn(\n\t\tHKey\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nNewRows sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tHKey\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> HubLoad"
+			"script": "parameters{\n\thashVal as string,\n\tTargetID as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> SATSource\nDataVaultSource derive(HKey = toString(sha2(256, byName($hashVal)))) ~> hashKeys\nhashKeys, TargetHubKey exists(HKey == hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> ExistRows\nHUBSource derive(hashID = toString(byName($TargetID))) ~> TargetHubKey\nAlterRow1 derive(each(match(name=='ID'))) ~> MapDrifted1\nMapDrifted1 select(mapColumn(\n\t\tHKey,\n\t\teach(match(name==$hashVal))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> NewHubRecords\nhashKeys select(mapColumn(\n\t\tHKey\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nSATSource derive(hashID = toString(byName($TargetID))) ~> TargetSATKey\nSelect2, TargetSATKey exists(HKey == hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> SatRowsExist\nExistRows alterRow(insertIf(true())) ~> AlterRow1\nNewHubRecords sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tHKey\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> HubLoad"
 		}
 	}
 }
