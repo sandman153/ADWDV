@@ -1,0 +1,32 @@
+{
+	"name": "DVSource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataVaultSource",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"schema": {
+				"type": "string",
+				"defaultValue": "schema"
+			},
+			"table": {
+				"type": "string",
+				"defaultValue": "table"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().schema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().table",
+				"type": "Expression"
+			}
+		}
+	}
+}

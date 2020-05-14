@@ -1,0 +1,55 @@
+{
+	"name": "DataVaultLoad",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "StageSource",
+						"type": "DatasetReference"
+					},
+					"name": "DataVaultSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "DVHUB",
+						"type": "DatasetReference"
+					},
+					"name": "HUBSource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DVHUB",
+						"type": "DatasetReference"
+					},
+					"name": "HubLoad"
+				}
+			],
+			"transformations": [
+				{
+					"name": "hashKeys"
+				},
+				{
+					"name": "NewRows"
+				},
+				{
+					"name": "ExistRows"
+				},
+				{
+					"name": "TargetKey"
+				},
+				{
+					"name": "MapDrifted1",
+					"description": "Creates an explicit mapping for each drifted column"
+				},
+				{
+					"name": "Select1"
+				}
+			],
+			"script": "parameters{\n\thashVal as string,\n\tTargetID as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nDataVaultSource derive(HKey = toString(sha2(256, byName($hashVal)))) ~> hashKeys\nSelect1 alterRow(insertIf(true())) ~> NewRows\nhashKeys, TargetKey exists(HKey == hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> ExistRows\nHUBSource derive(hashID = toString(byName($TargetID))) ~> TargetKey\nExistRows derive(SystemInformationID = toBoolean(byName('SystemInformationID'))) ~> MapDrifted1\nMapDrifted1 select(mapColumn(\n\t\tHKey,\n\t\tSystemInformationID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nNewRows sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> HubLoad"
+		}
+	}
+}

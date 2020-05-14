@@ -1,0 +1,32 @@
+{
+	"name": "StageSource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADWStage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"sourcetable": {
+				"type": "string",
+				"defaultValue": "source"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().sourcetable",
+					"type": "Expression"
+				},
+				"container": "adwstage"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

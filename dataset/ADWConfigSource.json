@@ -1,0 +1,28 @@
+{
+	"name": "ADWConfigSource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADWStage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "config.csv",
+				"container": "dvconfig"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "SchemaName,TableName,pk_name,SourceID,TargetID,HashColDiff,HubTable,SatName",
+				"type": "String"
+			}
+		]
+	}
+}
