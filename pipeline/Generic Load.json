@@ -156,6 +156,10 @@
 												"type": "Expression"
 											}
 										},
+										"SATSource": {
+											"schema": "dbo",
+											"satname": "sat"
+										},
 										"HubLoad": {
 											"schemaName": "dbo",
 											"hubName": {
