@@ -1,38 +1,13 @@
 {
-	"name": "General Load",
+	"name": "Generic Load",
 	"properties": {
 		"activities": [
 			{
-				"name": "Lookup config",
-				"type": "Lookup",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT [TableName]\n      ,[BusinessKeys]\n      ,[HASHDIFFValues]\n      ,[SCHEMAName]\n      ,[HubTable]\n      ,[SatName]\n  FROM [config].[Process]\n  WHERE Process.SCHEMAName = 'Person' AND Process.TableName = 'Person'",
-						"queryTimeout": "02:00:00"
-					},
-					"dataset": {
-						"referenceName": "Process",
-						"type": "DatasetReference"
-					},
-					"firstRowOnly": false
-				}
-			},
-			{
-				"name": "ForEachTable",
+				"name": "LoadDV",
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup config",
+						"activity": "Lookup Config",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -41,18 +16,17 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup config').output.value",
+						"value": "@activity('Lookup Config').output.value",
 						"type": "Expression"
 					},
-					"isSequential": false,
-					"batchCount": 5,
+					"isSequential": true,
 					"activities": [
 						{
-							"name": "Copy Data",
+							"name": "Copy Source Data",
 							"type": "Copy",
 							"dependsOn": [
 								{
-									"activity": "Set variable1",
+									"activity": "SetSource",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -68,11 +42,11 @@
 							"userProperties": [
 								{
 									"name": "Source",
-									"value": "dbo.@{item().TableName}"
+									"value": "@{item().SchemaName}.@{item().TableName}"
 								},
 								{
 									"name": "Destination",
-									"value": "adwstage//@{variables('TableName')}.csv"
+									"value": "adwstage//@{'<sourcetable>'}"
 								}
 							],
 							"typeProperties": {
@@ -88,22 +62,22 @@
 									"formatSettings": {
 										"type": "DelimitedTextWriteSettings",
 										"quoteAllText": true,
-										"fileExtension": ".txt"
+										"fileExtension": ".csv"
 									}
 								},
 								"enableStaging": false
 							},
 							"inputs": [
 								{
-									"referenceName": "ADWSourceData",
+									"referenceName": "DVSource",
 									"type": "DatasetReference",
 									"parameters": {
-										"tableName": {
-											"value": "@item().TableName",
+										"schema": {
+											"value": "@item().SchemaName",
 											"type": "Expression"
 										},
-										"schemaName": {
-											"value": "@item().SchemaName",
+										"table": {
+											"value": "@item().TableName",
 											"type": "Expression"
 										}
 									}
@@ -111,11 +85,11 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "GeneralSink",
+									"referenceName": "StageSource",
 									"type": "DatasetReference",
 									"parameters": {
-										"SinkName": {
-											"value": "@{variables('TableName')}.csv",
+										"sourcetable": {
+											"value": "@variables('st')",
 											"type": "Expression"
 										}
 									}
@@ -123,24 +97,24 @@
 							]
 						},
 						{
-							"name": "Set variable1",
+							"name": "SetSource",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "TableName",
+								"variableName": "st",
 								"value": {
-									"value": "@item().TableName",
+									"value": "@concat(item().SchemaName, item().TableName)",
 									"type": "Expression"
 								}
 							}
 						},
 						{
-							"name": "PersonDVLoad_copy1",
+							"name": "Data Vault Load",
 							"type": "ExecuteDataFlow",
 							"dependsOn": [
 								{
-									"activity": "Copy Data",
+									"activity": "Copy Source Data",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -156,45 +130,255 @@
 							"userProperties": [],
 							"typeProperties": {
 								"dataflow": {
-									"referenceName": "PersonDVLoad_copy1",
+									"referenceName": "DataVaultLoad",
 									"type": "DataFlowReference",
 									"parameters": {
-										"bkey": {
-											"value": "'@{item().HashDiffValues}'",
+										"hashVal": {
+											"value": "'@{item().SourceID}'",
+											"type": "Expression"
+										},
+										"TargetID": {
+											"value": "'@{item().TargetID}'",
 											"type": "Expression"
 										}
 									},
 									"datasetParameters": {
-										"DVSource": {
-											"SinkName": {
-												"value": "@{variables('TableName')}.csv",
+										"DataVaultSource": {
+											"sourcetable": {
+												"value": "@variables('st')",
 												"type": "Expression"
 											}
 										},
-										"HUBPerson": {
-											"hubname": {
+										"HUBSource": {
+											"schemaName": "dbo",
+											"hubName": {
 												"value": "@item().HubTable",
 												"type": "Expression"
-											},
-											"schemaName": "dbo"
+											}
+										},
+										"SATSource": {
+											"schema": "dbo",
+											"satname": {
+												"value": "@item().SatName",
+												"type": "Expression"
+											}
+										},
+										"HubLoad": {
+											"schemaName": "dbo",
+											"hubName": {
+												"value": "@item().HubTable",
+												"type": "Expression"
+											}
+										},
+										"SATLoad": {
+											"schema": "dbo",
+											"satname": {
+												"value": "@item().SatName",
+												"type": "Expression"
+											}
 										}
 									}
 								},
-								"compute": {
-									"coreCount": 8,
-									"computeType": "General"
+								"integrationRuntime": {
+									"referenceName": "AzureDataVaultDemo",
+									"type": "IntegrationRuntimeReference"
 								}
 							}
 						}
 					]
 				}
+			},
+			{
+				"name": "Lookup Config",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy Config Data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"isolationLevel": "ReadUncommitted"
+					},
+					"dataset": {
+						"referenceName": "DVConfig",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Load Config File",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-30.australiaeast.logic.azure.com:443/workflows/c5d5f0ef5dc141ca8cea66e35c55782a/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=e6YAQr5h-jsvqUI0f8Wfg5YnykZ3s0pB3AeEBk0O_n8",
+					"connectVia": {
+						"referenceName": "AzureDataVaultDemo",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "GET"
+				}
+			},
+			{
+				"name": "Copy Config Data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Load Config File",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "truncate table config.process",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "SchemaName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SCHEMAName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TableName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TableName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "pk_name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "pk_name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SourceID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SourceID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TargetID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TargetID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HashColDiff",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HashColDiff",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HubTable",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HubTable",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SatName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SatName",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ADWConfigSource",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DVConfig",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"variables": {
-			"TableName": {
-				"type": "String"
-			},
-			"BKey": {
+			"st": {
 				"type": "String"
 			}
 		},
