@@ -1,0 +1,80 @@
+{
+	"name": "DataVaultLoad",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "StageSource",
+						"type": "DatasetReference"
+					},
+					"name": "DataVaultSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "DVHUB",
+						"type": "DatasetReference"
+					},
+					"name": "HUBSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "DVSAT",
+						"type": "DatasetReference"
+					},
+					"name": "SATSource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DVHUB",
+						"type": "DatasetReference"
+					},
+					"name": "HubLoad"
+				},
+				{
+					"dataset": {
+						"referenceName": "DVSAT",
+						"type": "DatasetReference"
+					},
+					"name": "SATLoad"
+				}
+			],
+			"transformations": [
+				{
+					"name": "hashKeys"
+				},
+				{
+					"name": "NewRows"
+				},
+				{
+					"name": "TargetHubKey"
+				},
+				{
+					"name": "NewHubRecords"
+				},
+				{
+					"name": "Select2"
+				},
+				{
+					"name": "TargetSATKey"
+				},
+				{
+					"name": "SatRowsExist"
+				},
+				{
+					"name": "InsertSatRows"
+				},
+				{
+					"name": "NewSATRecords"
+				},
+				{
+					"name": "DerivedColumn1"
+				}
+			],
+			"script": "parameters{\n\thashVal as string,\n\tTargetID as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SATSource\nDataVaultSource derive(HKey = toString(sha2(256, toString(byName($hashVal)), currentTimestamp()) )) ~> hashKeys\nhashKeys, TargetHubKey exists(HKey == hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> NewRows\nHUBSource derive(hashID = toString(byName($TargetID))) ~> TargetHubKey\nInsertSatRows select(mapColumn(\n\t\tHKey,\n\t\teach(match(name==$hashVal))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> NewHubRecords\nDerivedColumn1 select(mapColumn(\n\t\tHKey,\n\t\teach(match(name!=$hashVal))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nSATSource derive(hashID = toString(byName($TargetID))) ~> TargetSATKey\nSelect2, TargetSATKey exists(HKey == hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> SatRowsExist\nNewRows alterRow(insertIf(true())) ~> InsertSatRows\nSatRowsExist alterRow(insertIf(true())) ~> NewSATRecords\nhashKeys derive(LoadDateTime = currentDate()) ~> DerivedColumn1\nNewHubRecords sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> HubLoad\nNewSATRecords sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 2) ~> SATLoad"
+		}
+	}
+}
