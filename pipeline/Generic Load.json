@@ -140,6 +140,10 @@
 										"TargetID": {
 											"value": "'@{item().TargetID}'",
 											"type": "Expression"
+										},
+										"hashDiff": {
+											"value": "'@{item().HashColDiff}'",
+											"type": "Expression"
 										}
 									},
 									"datasetParameters": {
