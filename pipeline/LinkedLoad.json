@@ -26,8 +26,8 @@
 				}
 			},
 			{
-				"name": "Switch1",
-				"type": "Switch",
+				"name": "ForEach1",
+				"type": "ForEach",
 				"dependsOn": [
 					{
 						"activity": "Lookup1",
@@ -38,7 +38,14 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"cases": []
+					"activities": [
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": []
+						}
+					]
 				}
 			}
 		],
