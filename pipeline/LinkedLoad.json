@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Lookup1",
+				"name": "LinkData",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -26,11 +26,11 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "LoadLink",
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup1",
+						"activity": "LinkData",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -38,12 +38,23 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@activity('LinkData').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
 					"activities": [
 						{
 							"name": "Set variable1",
 							"type": "SetVariable",
 							"dependsOn": [],
-							"userProperties": []
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "link_sources",
+								"value": [
+									""
+								]
+							}
 						}
 					]
 				}
