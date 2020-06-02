@@ -39,7 +39,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('LinkData').output.value",
+						"value": "@activity('LinkData').output",
 						"type": "Expression"
 					},
 					"isSequential": true,
