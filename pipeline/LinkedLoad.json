@@ -72,14 +72,10 @@
 							"userProperties": [],
 							"typeProperties": {
 								"on": {
-									"value": "length(variables('ls'))",
+									"value": "length(variables('ls')) == 2",
 									"type": "Expression"
 								},
-								"cases": [
-									{
-										"value": "length(variables('ls'))"
-									}
-								]
+								"cases": []
 							}
 						}
 					]
