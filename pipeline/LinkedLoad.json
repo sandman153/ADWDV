@@ -59,8 +59,8 @@
 							}
 						},
 						{
-							"name": "Switch1",
-							"type": "Switch",
+							"name": "If Condition1",
+							"type": "IfCondition",
 							"dependsOn": [
 								{
 									"activity": "Set variable1",
@@ -71,34 +71,18 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"on": {
-									"value": "length(variables('ls')) == 2",
+								"expression": {
+									"value": "@equals(length(variables('ls')), 2)",
 									"type": "Expression"
 								},
-								"cases": [
+								"ifTrueActivities": [
 									{
-										"value": "Case1",
-										"activities": [
-											{
-												"name": "Wait1",
-												"type": "Wait",
-												"dependsOn": [],
-												"userProperties": [],
-												"typeProperties": {
-													"waitTimeInSeconds": 1
-												}
-											}
-										]
-									}
-								],
-								"defaultActivities": [
-									{
-										"name": "Wait2",
+										"name": "Wait1",
 										"type": "Wait",
 										"dependsOn": [],
 										"userProperties": [],
 										"typeProperties": {
-											"waitTimeInSeconds": 1
+											"waitTimeInSeconds": 3
 										}
 									}
 								]
