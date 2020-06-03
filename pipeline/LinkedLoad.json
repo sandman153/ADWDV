@@ -77,7 +77,7 @@
 								},
 								"cases": [
 									{
-										"value": "Two Hubs"
+										"value": "length(variables('ls'))"
 									}
 								]
 							}
