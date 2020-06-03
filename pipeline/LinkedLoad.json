@@ -52,7 +52,7 @@
 							"typeProperties": {
 								"variableName": "link_sources",
 								"value": {
-									"value": "@item().source_table",
+									"value": "@split(item().source_table, ',')",
 									"type": "Expression"
 								}
 							}
