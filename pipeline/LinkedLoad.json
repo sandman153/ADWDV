@@ -22,7 +22,8 @@
 					"dataset": {
 						"referenceName": "LinkedLoadMeta",
 						"type": "DatasetReference"
-					}
+					},
+					"firstRowOnly": false
 				}
 			},
 			{
