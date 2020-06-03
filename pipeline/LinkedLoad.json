@@ -57,6 +57,22 @@
 									"type": "Expression"
 								}
 							}
+						},
+						{
+							"name": "Switch1",
+							"type": "Switch",
+							"dependsOn": [
+								{
+									"activity": "Set variable1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"cases": []
+							}
 						}
 					]
 				}
@@ -67,7 +83,7 @@
 				"type": "String"
 			},
 			"ls": {
-				"type": "String"
+				"type": "Array"
 			}
 		},
 		"annotations": []
