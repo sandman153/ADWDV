@@ -52,7 +52,7 @@
 							"typeProperties": {
 								"variableName": "ls",
 								"value": {
-									"value": "@activity('LinkData').output",
+									"value": "@item().source_table",
 									"type": "Expression"
 								}
 							}
