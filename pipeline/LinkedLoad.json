@@ -71,7 +71,15 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"cases": []
+								"on": {
+									"value": "length(variables('ls'))",
+									"type": "Expression"
+								},
+								"cases": [
+									{
+										"value": "Two Hubs"
+									}
+								]
 							}
 						}
 					]
