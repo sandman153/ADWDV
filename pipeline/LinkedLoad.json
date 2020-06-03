@@ -75,7 +75,11 @@
 									"value": "length(variables('ls')) == 2",
 									"type": "Expression"
 								},
-								"cases": []
+								"cases": [
+									{
+										"value": "Case1"
+									}
+								]
 							}
 						}
 					]
