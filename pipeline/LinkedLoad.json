@@ -77,7 +77,18 @@
 								},
 								"cases": [
 									{
-										"value": "Case1"
+										"value": "Case1",
+										"activities": [
+											{
+												"name": "Wait1",
+												"type": "Wait",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"waitTimeInSeconds": 1
+												}
+											}
+										]
 									}
 								]
 							}
