@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup Config').output",
+						"value": "@activity('Lookup Config').output.value",
 						"type": "Expression"
 					},
 					"isSequential": false,
@@ -383,7 +383,7 @@
 		],
 		"variables": {
 			"st": {
-				"type": "String"
+				"type": "Array"
 			}
 		},
 		"annotations": []
