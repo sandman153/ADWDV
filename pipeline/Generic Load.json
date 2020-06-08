@@ -383,7 +383,7 @@
 		],
 		"variables": {
 			"st": {
-				"type": "Array"
+				"type": "String"
 			}
 		},
 		"annotations": []
