@@ -199,7 +199,7 @@
 					{
 						"activity": "Copy Config Data",
 						"dependencyConditions": [
-							"Skipped"
+							"Succeeded"
 						]
 					}
 				],
