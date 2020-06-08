@@ -384,9 +384,6 @@
 		"variables": {
 			"st": {
 				"type": "String"
-			},
-			"link_sources": {
-				"type": "Array"
 			}
 		},
 		"annotations": []
