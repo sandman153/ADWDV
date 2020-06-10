@@ -13,4 +13,4 @@ jobs:
       with:
         server-name: ${{ secrets.SERVER_NAME }}
         connection-string: ${{ secrets.CONNECTION_STRING }}
-        dacpac-package: './ADWDV/Adventure Works Data Vault/AdventureWorksDV/DacPac/ADWDVDemo.dacpac'
+        dacpac-package: './Adventure Works Data Vault/AdventureWorksDV/DacPac/ADWDVDemo.dacpac'
