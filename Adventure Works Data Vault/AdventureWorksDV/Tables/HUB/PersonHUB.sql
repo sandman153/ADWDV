@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[PersonHUB](
+	[PersonVID] [nvarchar](512) NOT NULL,
+	[BusinessEntityID] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PersonVID] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+) 
+GO

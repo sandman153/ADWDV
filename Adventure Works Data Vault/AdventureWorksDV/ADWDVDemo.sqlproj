@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>AdventureWorksRV</Name>
+    <Name>ADWDVDemo</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{805ffea8-0d32-4f33-8d94-8d66566c9f1b}</ProjectGuid>
@@ -60,5 +60,12 @@
     <Folder Include="Tables\SAT" />
     <Folder Include="Tables\LINK" />
     <Folder Include="Tables\HUB" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\HUB\PersonHUB.sql" />
+    <Build Include="Tables\HUB\EmailAddressHUB.sql" />
+    <Build Include="Tables\SAT\PERSONSAT.sql" />
+    <Build Include="Tables\SAT\EmailAddressSAT.sql" />
+    <Build Include="Tables\LINK\EmailAddressIsUsedByPersonLINK.sql" />
   </ItemGroup>
 </Project>
