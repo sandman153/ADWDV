@@ -25,16 +25,15 @@
 						},
 						"datasetParameters": {
 							"DataVaultSource": {
-								"schema": "schema",
-								"table": "table"
+								"sourcetable": "personPersonView"
 							},
 							"source1": {
 								"schema": "dbo",
-								"satname": "sat"
+								"satname": "PersonSAT"
 							},
 							"sink1": {
 								"schema": "dbo",
-								"satname": "sat"
+								"satname": "PersonSAT"
 							}
 						}
 					},
