@@ -1,0 +1,50 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "dataflow1",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dataflow1",
+						"type": "DataFlowReference",
+						"parameters": {
+							"hashVal": "'BusinessEntityID'",
+							"TargetID": "'PersonVID'",
+							"hash": "'hash_Person'"
+						},
+						"datasetParameters": {
+							"DataVaultSource": {
+								"schema": "schema",
+								"table": "table"
+							},
+							"source1": {
+								"schema": "dbo",
+								"satname": "sat"
+							},
+							"sink1": {
+								"schema": "dbo",
+								"satname": "sat"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}
