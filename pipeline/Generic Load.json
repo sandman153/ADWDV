@@ -57,7 +57,8 @@
 								"sink": {
 									"type": "DelimitedTextSink",
 									"storeSettings": {
-										"type": "AzureBlobStorageWriteSettings"
+										"type": "AzureBlobStorageWriteSettings",
+										"copyBehavior": "PreserveHierarchy"
 									},
 									"formatSettings": {
 										"type": "DelimitedTextWriteSettings",
@@ -134,11 +135,15 @@
 									"type": "DataFlowReference",
 									"parameters": {
 										"hashVal": {
-											"value": "'@{item().SourceID}'",
+											"value": "@item().SourceID",
 											"type": "Expression"
 										},
 										"TargetID": {
-											"value": "'@{item().TargetID}'",
+											"value": "@item().TargetID",
+											"type": "Expression"
+										},
+										"hashDiff": {
+											"value": "@item().HashColDiff",
 											"type": "Expression"
 										}
 									},
