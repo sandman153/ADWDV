@@ -128,7 +128,12 @@
 								"secureOutput": false,
 								"secureInput": false
 							},
-							"userProperties": [],
+							"userProperties": [
+								{
+									"name": "Test_TargetID",
+									"value": "@item().TargetID"
+								}
+							],
 							"typeProperties": {
 								"dataflow": {
 									"referenceName": "DataVaultLoad",
