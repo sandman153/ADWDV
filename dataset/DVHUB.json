@@ -1,0 +1,22 @@
+{
+	"name": "DVHUB",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataVaultSource",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"schemaName": {
+				"type": "string",
+				"defaultValue": "dbo"
+			},
+			"HubName": {
+				"type": "string",
+				"defaultValue": "HubName"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
