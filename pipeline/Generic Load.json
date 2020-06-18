@@ -163,7 +163,7 @@
 										"HUBSource": {
 											"schemaName": "dbo",
 											"HubName": {
-												"value": "@item().HubName",
+												"value": "@item().HubTable",
 												"type": "Expression"
 											}
 										},
@@ -177,7 +177,7 @@
 										"HubLoad": {
 											"schemaName": "dbo",
 											"HubName": {
-												"value": "@item().HubName",
+												"value": "@item().HubTable",
 												"type": "Expression"
 											}
 										},
