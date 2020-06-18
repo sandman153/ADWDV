@@ -224,6 +224,10 @@
 						"queryTimeout": "02:00:00",
 						"isolationLevel": "ReadUncommitted"
 					},
+					"dataset": {
+						"referenceName": "DVConfig",
+						"type": "DatasetReference"
+					},
 					"firstRowOnly": false
 				}
 			},
@@ -279,12 +283,101 @@
 						}
 					},
 					"sink": {
-						"type": "AzureSqlSink",
-						"preCopyScript": "truncate table config.process",
-						"disableMetricsCollection": false
+						"type": "AzureSqlSink"
 					},
-					"enableStaging": false
-				}
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "SchemaName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SCHEMAName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TableName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TableName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "pk_name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "pk_name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SourceID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SourceID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TargetID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TargetID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HashColDiff",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HashColDiff",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HubTable",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HubTable",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SatName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SatName",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"outputs": [
+					{
+						"referenceName": "DVConfig",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"variables": {
