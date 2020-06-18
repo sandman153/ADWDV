@@ -1,0 +1,22 @@
+{
+	"name": "ADWSource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataVaultSource",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"schemaName": {
+				"type": "string",
+				"defaultValue": "schema"
+			},
+			"sourceName": {
+				"type": "string",
+				"defaultValue": "sourceTable"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
