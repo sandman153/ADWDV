@@ -273,13 +273,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "DelimitedTextSource",
+						"type": "ExcelSource",
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": true
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
 						}
 					},
 					"sink": {
@@ -372,6 +369,12 @@
 						]
 					}
 				},
+				"inputs": [
+					{
+						"referenceName": "ConfigSource",
+						"type": "DatasetReference"
+					}
+				],
 				"outputs": [
 					{
 						"referenceName": "DVConfig",
