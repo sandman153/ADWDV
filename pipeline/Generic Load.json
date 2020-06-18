@@ -57,28 +57,27 @@
 								"sink": {
 									"type": "DelimitedTextSink",
 									"storeSettings": {
-										"type": "AzureBlobStorageWriteSettings",
-										"copyBehavior": "PreserveHierarchy"
+										"type": "AzureBlobStorageWriteSettings"
 									},
 									"formatSettings": {
 										"type": "DelimitedTextWriteSettings",
 										"quoteAllText": true,
-										"fileExtension": ".csv"
+										"fileExtension": ".txt"
 									}
 								},
 								"enableStaging": false
 							},
 							"inputs": [
 								{
-									"referenceName": "DVSource",
+									"referenceName": "ADWSource",
 									"type": "DatasetReference",
 									"parameters": {
-										"schema": {
-											"value": "@item().SchemaName",
+										"schemaName": {
+											"value": "@item().schema_name",
 											"type": "Expression"
 										},
-										"table": {
-											"value": "@item().TableName",
+										"sourceName": {
+											"value": "()item.table_name",
 											"type": "Expression"
 										}
 									}
@@ -89,8 +88,8 @@
 									"referenceName": "StageSource",
 									"type": "DatasetReference",
 									"parameters": {
-										"sourcetable": {
-											"value": "@concat(variables('st'), '.csv')",
+										"sourceName": {
+											"value": "@variables('st')",
 											"type": "Expression"
 										}
 									}
@@ -158,30 +157,10 @@
 										}
 									},
 									"datasetParameters": {
-										"DataVaultSource": {
-											"sourcetable": {
-												"value": "@variables('st')",
-												"type": "Expression"
-											}
-										},
-										"HUBSource": {
-											"schemaName": "dbo",
-											"hubName": {
-												"value": "@item().HubTable",
-												"type": "Expression"
-											}
-										},
 										"SATSource": {
 											"schema": "dbo",
 											"satname": {
 												"value": "@item().SatName",
-												"type": "Expression"
-											}
-										},
-										"HubLoad": {
-											"schemaName": "dbo",
-											"hubName": {
-												"value": "@item().HubTable",
 												"type": "Expression"
 											}
 										},
@@ -227,10 +206,6 @@
 						"type": "AzureSqlSource",
 						"queryTimeout": "02:00:00",
 						"isolationLevel": "ReadUncommitted"
-					},
-					"dataset": {
-						"referenceName": "DVConfig",
-						"type": "DatasetReference"
 					},
 					"firstRowOnly": false
 				}
@@ -291,105 +266,8 @@
 						"preCopyScript": "truncate table config.process",
 						"disableMetricsCollection": false
 					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "SchemaName",
-									"type": "String"
-								},
-								"sink": {
-									"name": "SCHEMAName",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "TableName",
-									"type": "String"
-								},
-								"sink": {
-									"name": "TableName",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "pk_name",
-									"type": "String"
-								},
-								"sink": {
-									"name": "pk_name",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "SourceID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "SourceID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "TargetID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "TargetID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "HashColDiff",
-									"type": "String"
-								},
-								"sink": {
-									"name": "HashColDiff",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "HubTable",
-									"type": "String"
-								},
-								"sink": {
-									"name": "HubTable",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "SatName",
-									"type": "String"
-								},
-								"sink": {
-									"name": "SatName",
-									"type": "String"
-								}
-							}
-						]
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "ADWConfigSource",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "DVConfig",
-						"type": "DatasetReference"
-					}
-				]
+					"enableStaging": false
+				}
 			}
 		],
 		"variables": {
