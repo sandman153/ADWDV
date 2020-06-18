@@ -73,7 +73,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"schemaName": {
-											"value": "@item().schema_name",
+											"value": "@item().SCHEMAName",
 											"type": "Expression"
 										},
 										"sourceName": {
