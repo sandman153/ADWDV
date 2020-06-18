@@ -19,7 +19,7 @@
 						"value": "@activity('Lookup Config').output.value",
 						"type": "Expression"
 					},
-					"isSequential": false,
+					"isSequential": true,
 					"activities": [
 						{
 							"name": "Copy Source Data",
@@ -90,7 +90,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourcetable": {
-											"value": "@variables('st')",
+											"value": "@concat(variables('st'), '.csv')",
 											"type": "Expression"
 										}
 									}
@@ -101,11 +101,16 @@
 							"name": "SetSource",
 							"type": "SetVariable",
 							"dependsOn": [],
-							"userProperties": [],
+							"userProperties": [
+								{
+									"name": "debug_TargetID",
+									"value": "@item().TargetID"
+								}
+							],
 							"typeProperties": {
 								"variableName": "st",
 								"value": {
-									"value": "@concat(item().SchemaName, item().TableName)",
+									"value": "@concat(item().SchemaName, item().TableName, '.csv')",
 									"type": "Expression"
 								}
 							}
@@ -128,7 +133,12 @@
 								"secureOutput": false,
 								"secureInput": false
 							},
-							"userProperties": [],
+							"userProperties": [
+								{
+									"name": "Test_TargetID",
+									"value": "@item().TargetID"
+								}
+							],
 							"typeProperties": {
 								"dataflow": {
 									"referenceName": "DataVaultLoad",
