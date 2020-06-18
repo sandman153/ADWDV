@@ -58,76 +58,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ADWConfigSource')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ADWStage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "config.csv",
-						"container": "dvconfig"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "SchemaName,TableName,pk_name,SourceID,TargetID,HashColDiff,HubTable,SatName",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ADWStage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/StageSource')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ADWStage",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"sourcetable": {
-						"type": "string",
-						"defaultValue": "source"
-					}
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": {
-							"value": "@dataset().sourcetable",
-							"type": "Expression"
-						},
-						"container": "adwstage"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ADWStage')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/Adventure Works Data Vault')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -165,6 +95,292 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/AzureDataVaultDemo')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/StageSource')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ADWStage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"sourceName": {
+						"type": "string",
+						"defaultValue": "personPersonView"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().sourceName",
+							"type": "Expression"
+						},
+						"container": "adwstage"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "BusinessEntityID",
+						"type": "String"
+					},
+					{
+						"name": "PersonType",
+						"type": "String"
+					},
+					{
+						"name": "NameStyle",
+						"type": "String"
+					},
+					{
+						"name": "Title",
+						"type": "String"
+					},
+					{
+						"name": "FirstName",
+						"type": "String"
+					},
+					{
+						"name": "MiddleName",
+						"type": "String"
+					},
+					{
+						"name": "LastName",
+						"type": "String"
+					},
+					{
+						"name": "Suffix",
+						"type": "String"
+					},
+					{
+						"name": "EmailPromotion",
+						"type": "String"
+					},
+					{
+						"name": "AdditionalContactInfo",
+						"type": "String"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ADWStage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ConfigSource')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ADWStage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Table_Structure_config",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Table_Structure_config.xlsx",
+						"container": "dvconfig"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "schema_name",
+						"type": "String"
+					},
+					{
+						"name": "table_name",
+						"type": "String"
+					},
+					{
+						"name": "pk_name",
+						"type": "String"
+					},
+					{
+						"name": "SourceID",
+						"type": "String"
+					},
+					{
+						"name": "TargetID",
+						"type": "String"
+					},
+					{
+						"name": "HashColDiff",
+						"type": "String"
+					},
+					{
+						"name": "HubName",
+						"type": "String"
+					},
+					{
+						"name": "SATName",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ADWStage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DVSAT')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Adventure Works Data Vault",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"schema": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"satname": {
+						"type": "string",
+						"defaultValue": "sat"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().schema",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().satname",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LinkedLoadMeta')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Adventure Works Data Vault",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "table_type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "source_table",
+						"type": "nvarchar"
+					},
+					{
+						"name": "link_name",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "config",
+					"table": "linkload"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DVHUB')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataVaultSource",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"schemaName": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"HubName": {
+						"type": "string",
+						"defaultValue": "HubName"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().schemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().HubName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataVaultSource')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADWSource')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataVaultSource",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"schemaName": {
+						"type": "string",
+						"defaultValue": "schema"
+					},
+					"sourceName": {
+						"type": "string",
+						"defaultValue": "sourceTable"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().schemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().sourceName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataVaultSource')]"
 			]
 		},
 		{
@@ -219,117 +435,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DVHUB')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Adventure Works Data Vault",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"schemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
-					"hubName": {
-						"type": "string",
-						"defaultValue": "hubName"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().schemaName",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().hubName",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DVSAT')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Adventure Works Data Vault",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"schema": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
-					"satname": {
-						"type": "string",
-						"defaultValue": "sat"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().schema",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().satname",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DVSource')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataVaultSource",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"schema": {
-						"type": "string",
-						"defaultValue": "schema"
-					},
-					"table": {
-						"type": "string",
-						"defaultValue": "table"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().schema",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().table",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataVaultSource')]"
 			]
 		},
 		{
@@ -392,25 +497,22 @@
 							"name": "NewHubRecords"
 						},
 						{
-							"name": "Select2"
-						},
-						{
-							"name": "TargetSATKey"
-						},
-						{
 							"name": "SatRowsExist"
 						},
 						{
-							"name": "InsertSatRows"
+							"name": "InsertHubRows"
 						},
 						{
 							"name": "NewSATRecords"
 						},
 						{
-							"name": "DerivedColumn1"
+							"name": "Select1"
+						},
+						{
+							"name": "TargetSatKeys"
 						}
 					],
-					"script": "parameters{\n\thashVal as string,\n\tTargetID as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SATSource\nDataVaultSource derive(HKey = toString(sha2(256, byName($hashVal)))) ~> hashKeys\nhashKeys, TargetSATKey exists(HKey == hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> NewRows\nHUBSource derive(hashID = toString(byName($TargetID))) ~> TargetHubKey\nInsertSatRows select(mapColumn(\n\t\tHKey,\n\t\teach(match(name==$hashVal))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> NewHubRecords\nDerivedColumn1 select(mapColumn(\n\t\tHKey,\n\t\teach(match(name!=$hashVal))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nSATSource derive(hashID = toString(byName($TargetID))) ~> TargetSATKey\nSelect2, TargetHubKey exists(HKey == hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> SatRowsExist\nNewRows alterRow(insertIf(true())) ~> InsertSatRows\nSatRowsExist alterRow(insertIf(true())) ~> NewSATRecords\nhashKeys derive(LoadDateTime = currentDate()) ~> DerivedColumn1\nNewHubRecords sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tHKey\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> HubLoad\nNewSATRecords sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 2) ~> SATLoad"
+					"script": "parameters{\n\thashVal as string,\n\tTargetID as string,\n\thashDiff as string\n}\nsource(output(\n\t\tBusinessEntityID as string,\n\t\tPersonType as string,\n\t\tNameStyle as string,\n\t\tTitle as string,\n\t\tFirstName as string,\n\t\tMiddleName as string,\n\t\tLastName as string,\n\t\tSuffix as string,\n\t\tEmailPromotion as string,\n\t\tAdditionalContactInfo as string,\n\t\tModifiedDate as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SATSource\nDataVaultSource derive(HKey = toString(sha2(512, toString(byName($hashVal) ) ) ),\n\t\tLoadDateTime = currentDate(),\n\t\thashDiffValue = toString(sha2(512, columns()))) ~> hashKeys\nhashKeys, TargetHubKey exists(hashKeys@HKey == TargetHubKey@HKey,\n\tnegate:true,\n\tbroadcast: 'auto')~> NewRows\nHUBSource derive(HKey = byName($TargetID)) ~> TargetHubKey\nInsertHubRows select(mapColumn(\n\t\teach(match(name==$hashVal)),\n\t\teach(match(name=='HKey'),\n\t\t\treplace($$,'HKey',$TargetID) = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> NewHubRecords\nhashKeys, TargetSatKeys exists(hashDiffValue == hashID\n\t&& hashKeys@HKey == TargetSatKeys@HKey\n\t&& hashKeys@LoadDateTime == TargetSatKeys@LoadDateTime,\n\tnegate:true,\n\tbroadcast: 'auto')~> SatRowsExist\nNewRows alterRow(insertIf(true())) ~> InsertHubRows\nSatRowsExist alterRow(insertIf(true())) ~> NewSATRecords\nNewSATRecords select(mapColumn(\n\t\teach(match(name=='HKey'),\n\t\t\treplace($$,'HKey',$TargetID) = $$),\n\t\teach(match(name=='hashDiffValue'),\n\t\t\treplace($$,'hashDiffValue',$hashDiff) = $$),\n\t\teach(match(name!=$hashVal))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSATSource derive(HKey = byName($TargetID),\n\t\tLoadDateTime = toTimestamp(byName('LoadDateTime')),\n\t\thashID = byName($hashDiff)) ~> TargetSatKeys\nNewHubRecords sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> HubLoad\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 2) ~> SATLoad"
 				}
 			},
 			"dependsOn": [
@@ -485,21 +587,21 @@
 											"formatSettings": {
 												"type": "DelimitedTextWriteSettings",
 												"quoteAllText": true,
-												"fileExtension": ".csv"
+												"fileExtension": ".txt"
 											}
 										},
 										"enableStaging": false
 									},
 									"inputs": [
 										{
-											"referenceName": "DVSource",
+											"referenceName": "ADWSource",
 											"type": "DatasetReference",
 											"parameters": {
-												"schema": {
-													"value": "@item().SchemaName",
+												"schemaName": {
+													"value": "@item().SCHEMAName",
 													"type": "Expression"
 												},
-												"table": {
+												"sourceName": {
 													"value": "@item().TableName",
 													"type": "Expression"
 												}
@@ -511,7 +613,7 @@
 											"referenceName": "StageSource",
 											"type": "DatasetReference",
 											"parameters": {
-												"sourcetable": {
+												"sourceName": {
 													"value": "@variables('st')",
 													"type": "Expression"
 												}
@@ -523,11 +625,16 @@
 									"name": "SetSource",
 									"type": "SetVariable",
 									"dependsOn": [],
-									"userProperties": [],
+									"userProperties": [
+										{
+											"name": "debug_TargetID",
+											"value": "@item().TargetID"
+										}
+									],
 									"typeProperties": {
 										"variableName": "st",
 										"value": {
-											"value": "@concat(item().SchemaName, item().TableName)",
+											"value": "@concat(item().SchemaName, item().TableName, '.csv')",
 											"type": "Expression"
 										}
 									}
@@ -550,31 +657,37 @@
 										"secureOutput": false,
 										"secureInput": false
 									},
-									"userProperties": [],
+									"userProperties": [
+										{
+											"name": "Test_TargetID",
+											"value": "@item().TargetID"
+										}
+									],
 									"typeProperties": {
 										"dataflow": {
 											"referenceName": "DataVaultLoad",
 											"type": "DataFlowReference",
 											"parameters": {
 												"hashVal": {
-													"value": "'@{item().SourceID}'",
+													"value": "@item().SourceID",
 													"type": "Expression"
 												},
 												"TargetID": {
-													"value": "'@{item().TargetID}'",
+													"value": "@item().TargetID",
+													"type": "Expression"
+												},
+												"hashDiff": {
+													"value": "@item().HashColDiff",
 													"type": "Expression"
 												}
 											},
 											"datasetParameters": {
 												"DataVaultSource": {
-													"sourcetable": {
-														"value": "@variables('st')",
-														"type": "Expression"
-													}
+													"sourceName": "personPersonView"
 												},
 												"HUBSource": {
 													"schemaName": "dbo",
-													"hubName": {
+													"HubName": {
 														"value": "@item().HubTable",
 														"type": "Expression"
 													}
@@ -588,7 +701,7 @@
 												},
 												"HubLoad": {
 													"schemaName": "dbo",
-													"hubName": {
+													"HubName": {
 														"value": "@item().HubTable",
 														"type": "Expression"
 													}
@@ -688,19 +801,14 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "DelimitedTextSource",
+								"type": "ExcelSource",
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
 									"recursive": true
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
 								}
 							},
 							"sink": {
-								"type": "AzureSqlSink",
-								"preCopyScript": "truncate table config.process",
-								"disableMetricsCollection": false
+								"type": "AzureSqlSink"
 							},
 							"enableStaging": false,
 							"translator": {
@@ -708,7 +816,7 @@
 								"mappings": [
 									{
 										"source": {
-											"name": "SchemaName",
+											"name": "schema_name",
 											"type": "String"
 										},
 										"sink": {
@@ -718,7 +826,7 @@
 									},
 									{
 										"source": {
-											"name": "TableName",
+											"name": "table_name",
 											"type": "String"
 										},
 										"sink": {
@@ -768,7 +876,7 @@
 									},
 									{
 										"source": {
-											"name": "HubTable",
+											"name": "HubName",
 											"type": "String"
 										},
 										"sink": {
@@ -778,7 +886,7 @@
 									},
 									{
 										"source": {
-											"name": "SatName",
+											"name": "SATName",
 											"type": "String"
 										},
 										"sink": {
@@ -791,7 +899,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ADWConfigSource",
+								"referenceName": "ConfigSource",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -815,8 +923,8 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DVConfig')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AzureDataVaultDemo')]",
-				"[concat(variables('factoryId'), '/datasets/ADWConfigSource')]",
-				"[concat(variables('factoryId'), '/datasets/DVSource')]",
+				"[concat(variables('factoryId'), '/datasets/ConfigSource')]",
+				"[concat(variables('factoryId'), '/datasets/ADWSource')]",
 				"[concat(variables('factoryId'), '/datasets/StageSource')]",
 				"[concat(variables('factoryId'), '/dataflows/DataVaultLoad')]"
 			]
