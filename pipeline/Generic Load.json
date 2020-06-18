@@ -101,7 +101,12 @@
 							"name": "SetSource",
 							"type": "SetVariable",
 							"dependsOn": [],
-							"userProperties": [],
+							"userProperties": [
+								{
+									"name": "debug_TargetID",
+									"value": "@item().TargetID"
+								}
+							],
 							"typeProperties": {
 								"variableName": "st",
 								"value": {
