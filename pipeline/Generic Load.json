@@ -162,7 +162,10 @@
 										},
 										"HUBSource": {
 											"schemaName": "dbo",
-											"HubName": "HubName"
+											"HubName": {
+												"value": "@item().HubName",
+												"type": "Expression"
+											}
 										},
 										"SATSource": {
 											"schema": "dbo",
@@ -173,7 +176,10 @@
 										},
 										"HubLoad": {
 											"schemaName": "dbo",
-											"HubName": "HubName"
+											"HubName": {
+												"value": "@item().HubName",
+												"type": "Expression"
+											}
 										},
 										"SATLoad": {
 											"schema": "dbo",
