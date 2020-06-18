@@ -157,12 +157,23 @@
 										}
 									},
 									"datasetParameters": {
+										"DataVaultSource": {
+											"sourceName": "personPersonView"
+										},
+										"HUBSource": {
+											"schemaName": "dbo",
+											"HubName": "HubName"
+										},
 										"SATSource": {
 											"schema": "dbo",
 											"satname": {
 												"value": "@item().SatName",
 												"type": "Expression"
 											}
+										},
+										"HubLoad": {
+											"schemaName": "dbo",
+											"HubName": "HubName"
 										},
 										"SATLoad": {
 											"schema": "dbo",
