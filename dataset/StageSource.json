@@ -1,0 +1,77 @@
+{
+	"name": "StageSource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADWStage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"sourceName": {
+				"type": "string",
+				"defaultValue": "personPersonView"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().sourceName",
+					"type": "Expression"
+				},
+				"container": "adwstage"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "BusinessEntityID",
+				"type": "String"
+			},
+			{
+				"name": "PersonType",
+				"type": "String"
+			},
+			{
+				"name": "NameStyle",
+				"type": "String"
+			},
+			{
+				"name": "Title",
+				"type": "String"
+			},
+			{
+				"name": "FirstName",
+				"type": "String"
+			},
+			{
+				"name": "MiddleName",
+				"type": "String"
+			},
+			{
+				"name": "LastName",
+				"type": "String"
+			},
+			{
+				"name": "Suffix",
+				"type": "String"
+			},
+			{
+				"name": "EmailPromotion",
+				"type": "String"
+			},
+			{
+				"name": "AdditionalContactInfo",
+				"type": "String"
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "String"
+			}
+		]
+	}
+}
