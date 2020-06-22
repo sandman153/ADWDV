@@ -158,7 +158,10 @@
 									},
 									"datasetParameters": {
 										"DataVaultSource": {
-											"sourceName": "personPersonView"
+											"sourceName": {
+												"value": "@variables('st')",
+												"type": "Expression"
+											}
 										},
 										"HUBSource": {
 											"schemaName": "dbo",
