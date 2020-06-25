@@ -89,7 +89,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceName": {
-											"value": "@variables('st')",
+											"value": "@concat(variables('st'), '.csv')",
 											"type": "Expression"
 										}
 									}
