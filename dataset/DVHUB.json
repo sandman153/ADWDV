@@ -12,7 +12,7 @@
 			},
 			"HubName": {
 				"type": "string",
-				"defaultValue": "HubName"
+				"defaultValue": "PersonHUB"
 			}
 		},
 		"annotations": [],
