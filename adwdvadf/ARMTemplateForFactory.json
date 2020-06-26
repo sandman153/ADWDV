@@ -164,6 +164,10 @@
 										{
 											"name": "Test_TargetID",
 											"value": "@item().TargetID"
+										},
+										{
+											"name": "source_file",
+											"value": "@variables('st')"
 										}
 									],
 									"typeProperties": {

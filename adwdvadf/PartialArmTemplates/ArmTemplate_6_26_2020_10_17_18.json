@@ -1,0 +1,421 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adwdvadf"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Generic Load')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "LoadDV",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup Config",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup Config').output.value",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"activities": [
+								{
+									"name": "Copy Source Data",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "SetSource",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [
+										{
+											"name": "Source",
+											"value": "@{item().SchemaName}.@{item().TableName}"
+										},
+										{
+											"name": "Destination",
+											"value": "adwstage//@{'<sourcetable>'}"
+										}
+									],
+									"typeProperties": {
+										"source": {
+											"type": "AzureSqlSource",
+											"queryTimeout": "02:00:00"
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "ADWSource",
+											"type": "DatasetReference",
+											"parameters": {
+												"schemaName": {
+													"value": "@item().SCHEMAName",
+													"type": "Expression"
+												},
+												"sourceName": {
+													"value": "@item().TableName",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "StageSource",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceName": {
+													"value": "@concat(variables('st'), '.csv')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "SetSource",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [
+										{
+											"name": "debug_TargetID",
+											"value": "@item().TargetID"
+										}
+									],
+									"typeProperties": {
+										"variableName": "st",
+										"value": {
+											"value": "@concat(item().SchemaName, item().TableName)",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Data Vault Load",
+									"type": "ExecuteDataFlow",
+									"dependsOn": [
+										{
+											"activity": "Copy Source Data",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [
+										{
+											"name": "Test_TargetID",
+											"value": "@item().TargetID"
+										},
+										{
+											"name": "source_file",
+											"value": "@variables('st')"
+										}
+									],
+									"typeProperties": {
+										"dataflow": {
+											"referenceName": "DataVaultLoad",
+											"type": "DataFlowReference",
+											"parameters": {
+												"hashVal": {
+													"value": "@item().SourceID",
+													"type": "Expression"
+												},
+												"TargetID": {
+													"value": "@item().TargetID",
+													"type": "Expression"
+												},
+												"hashDiff": {
+													"value": "@item().HashColDiff",
+													"type": "Expression"
+												}
+											},
+											"datasetParameters": {
+												"DataVaultSource": {
+													"sourceName": {
+														"value": "@variables('st')",
+														"type": "Expression"
+													}
+												},
+												"HUBSource": {
+													"schemaName": "dbo",
+													"HubName": {
+														"value": "@item().HubTable",
+														"type": "Expression"
+													}
+												},
+												"SATSource": {
+													"schema": "dbo",
+													"satname": {
+														"value": "@item().SatName",
+														"type": "Expression"
+													}
+												},
+												"HubLoad": {
+													"schemaName": "dbo",
+													"HubName": {
+														"value": "@item().HubTable",
+														"type": "Expression"
+													}
+												},
+												"SATLoad": {
+													"schema": "dbo",
+													"satname": {
+														"value": "@item().SatName",
+														"type": "Expression"
+													}
+												}
+											}
+										},
+										"integrationRuntime": {
+											"referenceName": "AzureDataVaultDemo",
+											"type": "IntegrationRuntimeReference"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "Lookup Config",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Copy Config Data",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"isolationLevel": "ReadUncommitted"
+							},
+							"dataset": {
+								"referenceName": "DVConfig",
+								"type": "DatasetReference"
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Load Config File",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-30.australiaeast.logic.azure.com:443/workflows/c5d5f0ef5dc141ca8cea66e35c55782a/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=e6YAQr5h-jsvqUI0f8Wfg5YnykZ3s0pB3AeEBk0O_n8",
+							"connectVia": {
+								"referenceName": "AzureDataVaultDemo",
+								"type": "IntegrationRuntimeReference"
+							},
+							"method": "GET"
+						}
+					},
+					{
+						"name": "Copy Config Data",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Load Config File",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "truncate table config.process",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "schema_name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "SCHEMAName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "table_name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "TableName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "pk_name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "pk_name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "SourceID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "SourceID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "TargetID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "TargetID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "HashColDiff",
+											"type": "String"
+										},
+										"sink": {
+											"name": "HashColDiff",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "HubName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "HubTable",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "SATName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "SatName",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ConfigSource",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DVConfig",
+								"type": "DatasetReference"
+							}
+						]
+					}
+				],
+				"variables": {
+					"st": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		}
+	]
+}
