@@ -167,7 +167,7 @@
 									"datasetParameters": {
 										"DataVaultSource": {
 											"sourceName": {
-												"value": "@variables('st')",
+												"value": "@concat(variables('st'), '.csv')",
 												"type": "Expression"
 											}
 										},
