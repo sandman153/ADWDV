@@ -2,7 +2,7 @@
 	"name": "DVHUB",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureDataVaultSource",
+			"referenceName": "Adventure Works Data Vault",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
