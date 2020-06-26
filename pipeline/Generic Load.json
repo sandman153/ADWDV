@@ -140,6 +140,10 @@
 								{
 									"name": "source_file",
 									"value": "@variables('st')"
+								},
+								{
+									"name": "hashVal",
+									"value": "@item().SourceID"
 								}
 							],
 							"typeProperties": {
