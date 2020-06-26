@@ -139,7 +139,7 @@
 								},
 								{
 									"name": "source_file",
-									"value": "@variables('st')"
+									"value": "@concat(variables('st'), '.csv')"
 								},
 								{
 									"name": "hashVal",
