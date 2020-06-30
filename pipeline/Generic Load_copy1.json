@@ -1,0 +1,246 @@
+{
+	"name": "Generic Load_copy1",
+	"properties": {
+		"activities": [
+			{
+				"name": "LoadDV",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup Config",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup Config').output.value",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"activities": [
+						{
+							"name": "Copy Source Data",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "SetSource",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [
+								{
+									"name": "Source",
+									"value": "@{item().SchemaName}.@{item().TableName}"
+								},
+								{
+									"name": "Destination",
+									"value": "adwstage//@{'<sourcetable>'}"
+								}
+							],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"queryTimeout": "02:00:00"
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "ADWSource",
+									"type": "DatasetReference",
+									"parameters": {
+										"schemaName": {
+											"value": "@item().SCHEMAName",
+											"type": "Expression"
+										},
+										"sourceName": {
+											"value": "@item().TableName",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "StageSource",
+									"type": "DatasetReference",
+									"parameters": {
+										"sourceName": {
+											"value": "@concat(variables('st'), '.csv')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "SetSource",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [
+								{
+									"name": "debug_TargetID",
+									"value": "@item().TargetID"
+								}
+							],
+							"typeProperties": {
+								"variableName": "st",
+								"value": {
+									"value": "@concat(item().SchemaName, item().TableName)",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Data Vault Load",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [
+								{
+									"activity": "Copy Source Data",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [
+								{
+									"name": "Test_TargetID",
+									"value": "@item().TargetID"
+								},
+								{
+									"name": "source_file",
+									"value": "@concat(variables('st'), '.csv')"
+								},
+								{
+									"name": "hashVal",
+									"value": "@item().SourceID"
+								}
+							],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "DataVaultLoad",
+									"type": "DataFlowReference",
+									"parameters": {
+										"hashVal": {
+											"value": "@item().SourceID",
+											"type": "Expression"
+										},
+										"TargetID": {
+											"value": "@item().TargetID",
+											"type": "Expression"
+										},
+										"hashDiff": {
+											"value": "@item().HashColDiff",
+											"type": "Expression"
+										}
+									},
+									"datasetParameters": {
+										"DataVaultSource": {
+											"sourceName": {
+												"value": "@concat(variables('st'), '.csv')",
+												"type": "Expression"
+											}
+										},
+										"HUBSource": {
+											"schemaName": "dbo",
+											"HubName": {
+												"value": "@item().HubTable",
+												"type": "Expression"
+											}
+										},
+										"SATSource": {
+											"schema": "dbo",
+											"satname": {
+												"value": "@item().SatName",
+												"type": "Expression"
+											}
+										},
+										"HubLoad": {
+											"schemaName": "dbo",
+											"HubName": {
+												"value": "@item().HubTable",
+												"type": "Expression"
+											}
+										},
+										"SATLoad": {
+											"schema": "dbo",
+											"satname": {
+												"value": "@item().SatName",
+												"type": "Expression"
+											}
+										}
+									}
+								},
+								"integrationRuntime": {
+									"referenceName": "AzureDataVaultDemo",
+									"type": "IntegrationRuntimeReference"
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Lookup Config",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"isolationLevel": "ReadUncommitted"
+					},
+					"dataset": {
+						"referenceName": "DVConfig",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			}
+		],
+		"variables": {
+			"st": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
