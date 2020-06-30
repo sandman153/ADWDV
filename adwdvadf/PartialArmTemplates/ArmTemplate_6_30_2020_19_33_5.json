@@ -6,18 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "adwdvadf"
-		},
-		"ADWStage_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ADWStage'"
-		},
-		"Adventure Works Data Vault_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'Adventure Works Data Vault'"
-		},
-		"AzureDataVaultSource_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureDataVaultSource'"
 		}
 	},
 	"variables": {
@@ -229,7 +217,6 @@
 												}
 											}
 										},
-										"staging": {},
 										"integrationRuntime": {
 											"referenceName": "AzureDataVaultDemo",
 											"type": "IntegrationRuntimeReference"
@@ -266,8 +253,7 @@
 							},
 							"dataset": {
 								"referenceName": "DVConfig",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							},
 							"firstRowOnly": false
 						}
@@ -290,8 +276,7 @@
 								"referenceName": "AzureDataVaultDemo",
 								"type": "IntegrationRuntimeReference"
 							},
-							"method": "GET",
-							"headers": {}
+							"method": "GET"
 						}
 					},
 					{
@@ -416,15 +401,13 @@
 						"inputs": [
 							{
 								"referenceName": "ConfigSource",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "DVConfig",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					}
@@ -437,162 +420,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DVConfig')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AzureDataVaultDemo')]",
-				"[concat(variables('factoryId'), '/datasets/ConfigSource')]",
-				"[concat(variables('factoryId'), '/datasets/ADWSource')]",
 				"[concat(variables('factoryId'), '/datasets/StageSource')]",
 				"[concat(variables('factoryId'), '/dataflows/DataVaultLoad')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ADWSource')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataVaultSource",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"schemaName": {
-						"type": "string",
-						"defaultValue": "schema"
-					},
-					"sourceName": {
-						"type": "string",
-						"defaultValue": "sourceTable"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().schemaName",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().sourceName",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataVaultSource')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ConfigSource')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ADWStage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Table_Structure_config",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "Table_Structure_config.xlsx",
-						"container": "dvconfig"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "schema_name",
-						"type": "String"
-					},
-					{
-						"name": "table_name",
-						"type": "String"
-					},
-					{
-						"name": "pk_name",
-						"type": "String"
-					},
-					{
-						"name": "SourceID",
-						"type": "String"
-					},
-					{
-						"name": "TargetID",
-						"type": "String"
-					},
-					{
-						"name": "HashColDiff",
-						"type": "String"
-					},
-					{
-						"name": "HubName",
-						"type": "String"
-					},
-					{
-						"name": "SATName",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ADWStage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DVConfig')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Adventure Works Data Vault",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "SCHEMAName",
-						"type": "varchar"
-					},
-					{
-						"name": "TableName",
-						"type": "nvarchar"
-					},
-					{
-						"name": "pk_name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SourceID",
-						"type": "nvarchar"
-					},
-					{
-						"name": "TargetID",
-						"type": "nvarchar"
-					},
-					{
-						"name": "HashColDiff",
-						"type": "nvarchar"
-					},
-					{
-						"name": "HubTable",
-						"type": "varchar"
-					},
-					{
-						"name": "SatName",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "config",
-					"table": "Process"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
 			]
 		},
 		{
@@ -628,80 +457,7 @@
 					}
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DVSAT')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Adventure Works Data Vault",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"schema": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
-					"satname": {
-						"type": "string",
-						"defaultValue": "sat"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().schema",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().satname",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LinkedLoadMeta')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Adventure Works Data Vault",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "table_type",
-						"type": "nvarchar"
-					},
-					{
-						"name": "source_table",
-						"type": "nvarchar"
-					},
-					{
-						"name": "link_name",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "config",
-					"table": "linkload"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/StageSource')]",
@@ -735,81 +491,6 @@
 					"quoteChar": "\""
 				},
 				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ADWStage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ADWStage')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "Staging Adventure Works in preparation for DV load. Takes place of raw vault",
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('ADWStage_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Adventure Works Data Vault')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "AdventureWorks Data Vault Demo",
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('Adventure Works Data Vault_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "AzureDataVaultDemo",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/AzureDataVaultDemo')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureDataVaultSource')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "Azure Data Vault Demo Source - Adventure Works",
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureDataVaultSource_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "AzureDataVaultDemo",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/AzureDataVaultDemo')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureDataVaultDemo')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "Managed",
-				"typeProperties": {
-					"computeProperties": {
-						"location": "AutoResolve",
-						"dataFlowProperties": {
-							"computeType": "General",
-							"coreCount": 8,
-							"timeToLive": 0
-						}
-					}
-				}
 			},
 			"dependsOn": []
 		},
@@ -893,8 +574,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/StageSource')]",
-				"[concat(variables('factoryId'), '/datasets/DVHUB')]",
-				"[concat(variables('factoryId'), '/datasets/DVSAT')]"
+				"[concat(variables('factoryId'), '/datasets/DVHUB')]"
 			]
 		}
 	]
