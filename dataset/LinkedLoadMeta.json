@@ -1,0 +1,29 @@
+{
+	"name": "LinkedLoadMeta",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Adventure Works Data Vault",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "table_type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "source_table",
+				"type": "nvarchar"
+			},
+			{
+				"name": "link_name",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "config",
+			"table": "linkload"
+		}
+	}
+}

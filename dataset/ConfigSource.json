@@ -1,0 +1,54 @@
+{
+	"name": "ConfigSource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADWStage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Table_Structure_config",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Table_Structure_config.xlsx",
+				"container": "dvconfig"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "schema_name",
+				"type": "String"
+			},
+			{
+				"name": "table_name",
+				"type": "String"
+			},
+			{
+				"name": "pk_name",
+				"type": "String"
+			},
+			{
+				"name": "SourceID",
+				"type": "String"
+			},
+			{
+				"name": "TargetID",
+				"type": "String"
+			},
+			{
+				"name": "HashColDiff",
+				"type": "String"
+			},
+			{
+				"name": "HubName",
+				"type": "String"
+			},
+			{
+				"name": "SATName",
+				"type": "String"
+			}
+		]
+	}
+}
