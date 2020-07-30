@@ -422,10 +422,7 @@
 							"value": "@pipeline().Pipeline",
 							"type": "Expression"
 						},
-						"Subject": {
-							"value": "@pipeline().TriggerName",
-							"type": "Expression"
-						},
+						"Subject": "Pipeline Failed!!!",
 						"ErrorMessage": {
 							"value": "@{activity('Copy Config Data').Error.Message}",
 							"type": "Expression"
