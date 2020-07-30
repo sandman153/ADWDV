@@ -394,6 +394,42 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Copy Config Data",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pipeline1",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"DataFactoryName": {
+							"value": "@pipeline().DataFactory",
+							"type": "Expression"
+						},
+						"PipelineName": {
+							"value": "@pipeline().Pipeline",
+							"type": "Expression"
+						},
+						"Subject": "Pipeline Failed!!!",
+						"ErrorMessage": {
+							"value": "@{activity('Copy Config Data').Error.Message}",
+							"type": "Expression"
+						},
+						"EmailTo": "sarath@sarathboppudi.com"
+					}
+				}
 			}
 		],
 		"variables": {
