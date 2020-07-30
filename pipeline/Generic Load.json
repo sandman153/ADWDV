@@ -312,7 +312,7 @@
 							{
 								"source": {
 									"name": "table_name",
-									"type": "Boolean"
+									"type": "String"
 								},
 								"sink": {
 									"name": "TableName",
