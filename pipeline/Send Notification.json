@@ -16,10 +16,14 @@
 				"userProperties": [],
 				"typeProperties": {
 					"url": "https://prod-13.australiaeast.logic.azure.com:443/workflows/100ac7d0d6b342f3988968ba8f4245d4/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=MQHPjjb4Fkqs-ESXHeqeX-rH9h5OkLVn3ApNYLBBc-8",
+					"connectVia": {
+						"referenceName": "AzureDataVaultDemo",
+						"type": "IntegrationRuntimeReference"
+					},
 					"method": "POST",
 					"body": {
 						"DataFactoryName": "@{pipeline().DataFactory}",
-						"PipelineName": "@{pipeline().Pipeline}",
+						"PipelineName": "@{pipeline().parameters.PipelineName}",
 						"Subject": "@{pipeline().parameters.Subject}",
 						"ErrorMessage": "@{pipeline().parameters.ErrorMessage}",
 						"EmailTo": "@pipeline().parameters.EmailTo"
