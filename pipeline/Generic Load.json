@@ -394,47 +394,6 @@
 						"type": "DatasetReference"
 					}
 				]
-			},
-			{
-				"name": "Copy Config Notification Error",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "Copy Config Data",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
-				"userProperties": [
-					{
-						"name": "PipelineName",
-						"value": "'Error Copy Config Data - Send Notification'"
-					}
-				],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "Send Notification",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"DataFactoryName": {
-							"value": "@pipeline().DataFactory",
-							"type": "Expression"
-						},
-						"PipelineName": {
-							"value": "@concat('Copy Config Data', '  -  ', pipeline().Pipeline)",
-							"type": "Expression"
-						},
-						"Subject": "Pipeline Failed!!!",
-						"ErrorMessage": {
-							"value": "@{activity('Copy Config Data').Error.Message}",
-							"type": "Expression"
-						},
-						"EmailTo": "sarath@sarathboppudi.com"
-					}
-				}
 			}
 		],
 		"variables": {
