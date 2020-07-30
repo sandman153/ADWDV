@@ -1,0 +1,27 @@
+{
+	"name": "pipeline2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pipeline1",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@{activity('pipeline1').Error.Message}",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}

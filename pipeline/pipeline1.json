@@ -1,0 +1,49 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Error Message Test",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-13.australiaeast.logic.azure.com:443/workflows/100ac7d0d6b342f3988968ba8f4245d4/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=MQHPjjb4Fkqs-ESXHeqeX-rH9h5OkLVn3ApNYLBBc-8",
+					"method": "POST",
+					"body": {
+						"DataFactoryName": "@{pipeline().DataFactory}",
+						"PipelineName": "@{pipeline().Pipeline}",
+						"Subject": "@{pipeline().parameters.Subject}",
+						"ErrorMessage": "@{pipeline().parameters.ErrorMessage}",
+						"EmailTo": "@pipeline().parameters.EmailTo"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"DataFactoryName": {
+				"type": "string"
+			},
+			"PipelineName": {
+				"type": "string"
+			},
+			"Subject": {
+				"type": "string"
+			},
+			"ErrorMessage": {
+				"type": "string"
+			},
+			"EmailTo": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
