@@ -396,7 +396,7 @@
 				]
 			},
 			{
-				"name": "pipeline1",
+				"name": "Copy Config Notification Error",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -409,7 +409,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "pipeline1",
+						"referenceName": "Send Notification",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,
@@ -419,7 +419,7 @@
 							"type": "Expression"
 						},
 						"PipelineName": {
-							"value": "@{activity('Copy Config Data').Name}",
+							"value": "@pipeline().Pipeline",
 							"type": "Expression"
 						},
 						"Subject": "Pipeline Failed!!!",
