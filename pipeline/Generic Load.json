@@ -400,13 +400,18 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "Copy Config Data",
+						"activity": "Set Error Messge",
 						"dependencyConditions": [
-							"Failed"
+							"Succeeded"
 						]
 					}
 				],
-				"userProperties": [],
+				"userProperties": [
+					{
+						"name": "pipeline",
+						"value": "'Error Copy Config Data - Send Notification'"
+					}
+				],
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "Send Notification",
@@ -419,7 +424,7 @@
 							"type": "Expression"
 						},
 						"PipelineName": {
-							"value": "'Error Copy Config Data - Send Notification'",
+							"value": "@variables('Error Message')",
 							"type": "Expression"
 						},
 						"Subject": "Pipeline Failed!!!",
@@ -430,10 +435,33 @@
 						"EmailTo": "sarath@sarathboppudi.com"
 					}
 				}
+			},
+			{
+				"name": "Set Error Messge",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Copy Config Data",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Error Message",
+					"value": {
+						"value": "'Copy Config Data'",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
 			"st": {
+				"type": "String"
+			},
+			"Error Message": {
 				"type": "String"
 			}
 		},
