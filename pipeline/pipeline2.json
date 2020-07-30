@@ -15,7 +15,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@{activity('pipeline1').Error.Message}",
+							"value": "@{activity('Execute Pipeline1').Error.Message}",
 							"type": "Expression"
 						}
 					}
