@@ -1,8 +1,8 @@
 {
-	"name": "Adventure Works Data Vault",
+	"name": "AdventureWorksDataVault",
 	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
-		"description": "AdventureWorks Data Vault Demo",
+		"description": "AdventureWorksDataVaultDemo",
 		"annotations": [],
 		"type": "AzureSqlDatabase",
 		"typeProperties": {
