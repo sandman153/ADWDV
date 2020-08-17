@@ -11,9 +11,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ADWStage'"
 		},
-		"Adventure Works Data Vault_connectionString": {
+		"AdventureWorksDataVault_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'Adventure Works Data Vault'"
+			"metadata": "Secure string for 'connectionString' of 'AdventureWorksDataVault'"
 		},
 		"AzureDataVaultSource_connectionString": {
 			"type": "secureString",
@@ -213,15 +213,15 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Adventure Works Data Vault')]",
+			"name": "[concat(parameters('factoryName'), '/AdventureWorksDataVault')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "AdventureWorks Data Vault Demo",
+				"description": "AdventureWorksDataVaultDemo",
 				"annotations": [],
 				"type": "AzureSqlDatabase",
 				"typeProperties": {
-					"connectionString": "[parameters('Adventure Works Data Vault_connectionString')]"
+					"connectionString": "[parameters('AdventureWorksDataVault_connectionString')]"
 				},
 				"connectVia": {
 					"referenceName": "AzureDataVaultDemo",
@@ -295,7 +295,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "Adventure Works Data Vault",
+					"referenceName": "AdventureWorksDataVault",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -340,7 +340,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
+				"[concat(variables('factoryId'), '/linkedServices/AdventureWorksDataVault')]"
 			]
 		},
 		{
@@ -349,7 +349,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "Adventure Works Data Vault",
+					"referenceName": "AdventureWorksDataVault",
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
@@ -377,7 +377,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
+				"[concat(variables('factoryId'), '/linkedServices/AdventureWorksDataVault')]"
 			]
 		},
 		{
@@ -386,7 +386,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "Adventure Works Data Vault",
+					"referenceName": "AdventureWorksDataVault",
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
@@ -414,7 +414,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
+				"[concat(variables('factoryId'), '/linkedServices/AdventureWorksDataVault')]"
 			]
 		},
 		{
@@ -423,7 +423,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "Adventure Works Data Vault",
+					"referenceName": "AdventureWorksDataVault",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -448,7 +448,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Adventure Works Data Vault')]"
+				"[concat(variables('factoryId'), '/linkedServices/AdventureWorksDataVault')]"
 			]
 		},
 		{

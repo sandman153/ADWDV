@@ -8,7 +8,7 @@
 		"ADWStage_connectionString": {
 			"value": ""
 		},
-		"Adventure Works Data Vault_connectionString": {
+		"AdventureWorksDataVault_connectionString": {
 			"value": ""
 		},
 		"AzureDataVaultSource_connectionString": {

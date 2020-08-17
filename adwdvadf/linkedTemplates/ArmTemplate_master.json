@@ -11,9 +11,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ADWStage'"
 		},
-		"Adventure Works Data Vault_connectionString": {
+		"AdventureWorksDataVault_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'Adventure Works Data Vault'"
+			"metadata": "Secure string for 'connectionString' of 'AdventureWorksDataVault'"
 		},
 		"AzureDataVaultSource_connectionString": {
 			"type": "secureString",
@@ -49,8 +49,8 @@
 					"ADWStage_connectionString": {
 						"value": "[parameters('ADWStage_connectionString')]"
 					},
-					"Adventure Works Data Vault_connectionString": {
-						"value": "[parameters('Adventure Works Data Vault_connectionString')]"
+					"AdventureWorksDataVault_connectionString": {
+						"value": "[parameters('AdventureWorksDataVault_connectionString')]"
 					},
 					"AzureDataVaultSource_connectionString": {
 						"value": "[parameters('AzureDataVaultSource_connectionString')]"
