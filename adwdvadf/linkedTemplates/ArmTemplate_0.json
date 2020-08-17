@@ -58,6 +58,65 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Send Notification')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Error Message Test",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-13.australiaeast.logic.azure.com:443/workflows/100ac7d0d6b342f3988968ba8f4245d4/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=MQHPjjb4Fkqs-ESXHeqeX-rH9h5OkLVn3ApNYLBBc-8",
+							"connectVia": {
+								"referenceName": "AzureDataVaultDemo",
+								"type": "IntegrationRuntimeReference"
+							},
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"DataFactoryName": "@{pipeline().DataFactory}",
+								"PipelineName": "@{pipeline().parameters.PipelineName}",
+								"Subject": "@{pipeline().parameters.Subject}",
+								"ErrorMessage": "@{pipeline().parameters.ErrorMessage}",
+								"EmailTo": "@pipeline().parameters.EmailTo"
+							}
+						}
+					}
+				],
+				"parameters": {
+					"DataFactoryName": {
+						"type": "string"
+					},
+					"PipelineName": {
+						"type": "string"
+					},
+					"Subject": {
+						"type": "string"
+					},
+					"ErrorMessage": {
+						"type": "string"
+					},
+					"EmailTo": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AzureDataVaultDemo')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ConfigSource')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -467,7 +526,7 @@
 							"name": "TargetSatKeys"
 						}
 					],
-					"script": "parameters{\n\thashVal as string,\n\tTargetID as string,\n\thashDiff as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SATSource\nDataVaultSource derive(HKey = toString(sha2(256, byName(toString($hashVal)))),\n\t\tLoadDateTime = currentDate()) ~> hashKeys\nhashKeys, TargetHubKey exists(hashKeys@HKey == TargetHubKey@HKey,\n\tnegate:true,\n\tbroadcast: 'auto')~> NewRows\nHUBSource derive(HKey = toString(byName(toString($TargetID)))) ~> TargetHubKey\nInsertHubRows select(mapColumn(\n\t\teach(match(name==$hashVal)),\n\t\teach(match(name=='HKey'),\n\t\t\treplace($$,'HKey',$TargetID) = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> NewHubRecords\nhashKeys, TargetSatKeys exists(hashKeys@HKey == TargetSatKeys@HKey\n\t&& hashKeys@LoadDateTime == TargetSatKeys@LoadDateTime,\n\tnegate:true,\n\tbroadcast: 'auto')~> SatRowsExist\nNewRows alterRow(insertIf(true())) ~> InsertHubRows\nSatRowsExist alterRow(insertIf(true())) ~> NewSATRecords\nNewSATRecords select(mapColumn(\n\t\teach(match(name=='HKey'),\n\t\t\treplace($$,'HKey',$TargetID) = $$),\n\t\teach(match(name=='hashDiffValue'),\n\t\t\treplace($$,'hashDiffValue',$hashDiff) = $$),\n\t\teach(match(name!=$hashVal))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSATSource derive(HKey = byName(toString($TargetID)),\n\t\tLoadDateTime = toTimestamp(byName('LoadDateTime')),\n\t\thashID = byName(toString($hashDiff))) ~> TargetSatKeys\nNewHubRecords sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> HubLoad\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 2) ~> SATLoad"
+					"script": "parameters{\n\thashVal as string,\n\tTargetID as string,\n\thashDiff as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SATSource\nDataVaultSource derive(HKey = toString(sha2(256, byName(toString($hashVal)))),\n\t\tLoadDateTime = currentTimestamp(),\n\t\thashDiffValue = sha2(512, columns())) ~> hashKeys\nhashKeys, TargetHubKey exists(hashKeys@HKey == TargetHubKey@HKey,\n\tnegate:true,\n\tbroadcast: 'auto')~> NewRows\nHUBSource derive(HKey = toString(byName(toString($TargetID)))) ~> TargetHubKey\nInsertHubRows select(mapColumn(\n\t\teach(match(name==$hashVal)),\n\t\teach(match(name=='HKey'),\n\t\t\treplace($$,'HKey',$TargetID) = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> NewHubRecords\nhashKeys, TargetSatKeys exists(hashKeys@HKey == TargetSatKeys@HKey\n\t&& hashKeys@LoadDateTime == TargetSatKeys@LoadDateTime\n\t&& hashDiffValue == hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> SatRowsExist\nNewRows alterRow(insertIf(true())) ~> InsertHubRows\nSatRowsExist alterRow(insertIf(true())) ~> NewSATRecords\nNewSATRecords select(mapColumn(\n\t\teach(match(name=='HKey'),\n\t\t\treplace($$,'HKey',$TargetID) = $$),\n\t\teach(match(name=='hashDiffValue'),\n\t\t\treplace($$,'hashDiffValue',$hashDiff) = $$),\n\t\teach(match(name!=$hashVal))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSATSource derive(HKey = byName(toString($TargetID)),\n\t\tLoadDateTime = toTimestamp(byName('LoadDateTime')),\n\t\thashID = byName(toString($hashDiff))) ~> TargetSatKeys\nNewHubRecords sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> HubLoad\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 2) ~> SATLoad"
 				}
 			},
 			"dependsOn": [
@@ -532,7 +591,8 @@
 									"typeProperties": {
 										"source": {
 											"type": "AzureSqlSource",
-											"queryTimeout": "02:00:00"
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
 										},
 										"sink": {
 											"type": "DelimitedTextSink",
@@ -714,7 +774,8 @@
 							"source": {
 								"type": "AzureSqlSource",
 								"queryTimeout": "02:00:00",
-								"isolationLevel": "ReadUncommitted"
+								"isolationLevel": "ReadUncommitted",
+								"partitionOption": "None"
 							},
 							"dataset": {
 								"referenceName": "DVConfig",
@@ -759,7 +820,7 @@
 						],
 						"policy": {
 							"timeout": "7.00:00:00",
-							"retry": 0,
+							"retry": 1,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
 							"secureInput": false
@@ -795,7 +856,7 @@
 									{
 										"source": {
 											"name": "table_name",
-											"type": "String"
+											"type": "Boolean"
 										},
 										"sink": {
 											"name": "TableName",
@@ -879,6 +940,311 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Copy Config Notification Error",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Copy Config Data",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [
+							{
+								"name": "PipelineName",
+								"value": "'Error Copy Config Data - Send Notification'"
+							}
+						],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Send Notification",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"DataFactoryName": {
+									"value": "@pipeline().DataFactory",
+									"type": "Expression"
+								},
+								"PipelineName": {
+									"value": "@concat('Copy Config Data', '  -  ', pipeline().Pipeline)",
+									"type": "Expression"
+								},
+								"Subject": "Pipeline Failed!!!",
+								"ErrorMessage": {
+									"value": "@{pipeline('Generic Load').Error.Message}",
+									"type": "Expression"
+								},
+								"EmailTo": "sarath@sarathboppudi.com"
+							}
+						}
+					}
+				],
+				"variables": {
+					"st": {
+						"type": "String"
+					},
+					"Error Message": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DVConfig')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AzureDataVaultDemo')]",
+				"[concat(variables('factoryId'), '/datasets/ConfigSource')]",
+				"[concat(variables('factoryId'), '/pipelines/Send Notification')]",
+				"[concat(variables('factoryId'), '/datasets/ADWSource')]",
+				"[concat(variables('factoryId'), '/datasets/StageSource')]",
+				"[concat(variables('factoryId'), '/dataflows/DataVaultLoad')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Generic Load_copy1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "LoadDV",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup Config",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup Config').output.value",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"activities": [
+								{
+									"name": "Copy Source Data",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "SetSource",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [
+										{
+											"name": "Source",
+											"value": "@{item().SchemaName}.@{item().TableName}"
+										},
+										{
+											"name": "Destination",
+											"value": "adwstage//@{'<sourcetable>'}"
+										}
+									],
+									"typeProperties": {
+										"source": {
+											"type": "AzureSqlSource",
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "ADWSource",
+											"type": "DatasetReference",
+											"parameters": {
+												"schemaName": {
+													"value": "@item().SCHEMAName",
+													"type": "Expression"
+												},
+												"sourceName": {
+													"value": "@item().TableName",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "StageSource",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceName": {
+													"value": "@concat(variables('st'), '.csv')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "SetSource",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [
+										{
+											"name": "debug_TargetID",
+											"value": "@item().TargetID"
+										}
+									],
+									"typeProperties": {
+										"variableName": "st",
+										"value": {
+											"value": "@concat(item().SchemaName, item().TableName)",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Data Vault Load",
+									"type": "ExecuteDataFlow",
+									"dependsOn": [
+										{
+											"activity": "Copy Source Data",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [
+										{
+											"name": "Test_TargetID",
+											"value": "@item().TargetID"
+										},
+										{
+											"name": "source_file",
+											"value": "@concat(variables('st'), '.csv')"
+										},
+										{
+											"name": "hashVal",
+											"value": "@item().SourceID"
+										}
+									],
+									"typeProperties": {
+										"dataflow": {
+											"referenceName": "DataVaultLoad",
+											"type": "DataFlowReference",
+											"parameters": {
+												"hashVal": {
+													"value": "@item().SourceID",
+													"type": "Expression"
+												},
+												"TargetID": {
+													"value": "@item().TargetID",
+													"type": "Expression"
+												},
+												"hashDiff": {
+													"value": "@item().HashColDiff",
+													"type": "Expression"
+												}
+											},
+											"datasetParameters": {
+												"DataVaultSource": {
+													"sourceName": {
+														"value": "@concat(variables('st'), '.csv')",
+														"type": "Expression"
+													}
+												},
+												"HUBSource": {
+													"schemaName": "dbo",
+													"HubName": {
+														"value": "@item().HubTable",
+														"type": "Expression"
+													}
+												},
+												"SATSource": {
+													"schema": "dbo",
+													"satname": {
+														"value": "@item().SatName",
+														"type": "Expression"
+													}
+												},
+												"HubLoad": {
+													"schemaName": "dbo",
+													"HubName": {
+														"value": "@item().HubTable",
+														"type": "Expression"
+													}
+												},
+												"SATLoad": {
+													"schema": "dbo",
+													"satname": {
+														"value": "@item().SatName",
+														"type": "Expression"
+													}
+												}
+											}
+										},
+										"staging": {},
+										"integrationRuntime": {
+											"referenceName": "AzureDataVaultDemo",
+											"type": "IntegrationRuntimeReference"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "Lookup Config",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"isolationLevel": "ReadUncommitted",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DVConfig",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
 					}
 				],
 				"variables": {
@@ -890,11 +1256,37 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DVConfig')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AzureDataVaultDemo')]",
-				"[concat(variables('factoryId'), '/datasets/ConfigSource')]",
 				"[concat(variables('factoryId'), '/datasets/ADWSource')]",
 				"[concat(variables('factoryId'), '/datasets/StageSource')]",
-				"[concat(variables('factoryId'), '/dataflows/DataVaultLoad')]"
+				"[concat(variables('factoryId'), '/dataflows/DataVaultLoad')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AzureDataVaultDemo')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Generic Load",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Generic Load",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": false,
+							"parameters": {}
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Generic Load')]"
 			]
 		}
 	]
