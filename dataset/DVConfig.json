@@ -2,7 +2,7 @@
 	"name": "DVConfig",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Adventure Works Data Vault",
+			"referenceName": "AdventureWorksDataVault",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
