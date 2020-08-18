@@ -69,4 +69,7 @@
     <Build Include="Tables\SAT\EmailAddressSAT.sql" />
     <Build Include="Tables\LINK\EmailAddressIsUsedByPersonLINK.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ADWDVDemo.publish.xml" />
+  </ItemGroup>
 </Project>
