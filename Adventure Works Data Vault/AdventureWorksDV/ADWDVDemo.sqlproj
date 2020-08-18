@@ -23,6 +23,7 @@
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
     <GenerateCreateScript>False</GenerateCreateScript>
+    <IncludeSchemaNameInFileName>True</IncludeSchemaNameInFileName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -68,5 +69,8 @@
     <Build Include="Tables\SAT\PERSONSAT.sql" />
     <Build Include="Tables\SAT\EmailAddressSAT.sql" />
     <Build Include="Tables\LINK\EmailAddressIsUsedByPersonLINK.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ADWDVDemo.publish.xml" />
   </ItemGroup>
 </Project>
