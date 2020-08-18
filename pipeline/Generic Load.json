@@ -276,7 +276,7 @@
 				],
 				"policy": {
 					"timeout": "7.00:00:00",
-					"retry": 0,
+					"retry": 1,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
@@ -312,7 +312,7 @@
 							{
 								"source": {
 									"name": "table_name",
-									"type": "String"
+									"type": "Boolean"
 								},
 								"sink": {
 									"name": "TableName",
@@ -394,10 +394,54 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Copy Config Notification Error",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Copy Config Data",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [
+					{
+						"name": "PipelineName",
+						"value": "'Error Copy Config Data - Send Notification'"
+					}
+				],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Send Notification",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"DataFactoryName": {
+							"value": "@pipeline().DataFactory",
+							"type": "Expression"
+						},
+						"PipelineName": {
+							"value": "@concat('Copy Config Data', '  -  ', pipeline().Pipeline)",
+							"type": "Expression"
+						},
+						"Subject": "Pipeline Failed!!!",
+						"ErrorMessage": {
+							"value": "@{pipeline('Generic Load').Error.Message}",
+							"type": "Expression"
+						},
+						"EmailTo": "sarath@sarathboppudi.com"
+					}
+				}
 			}
 		],
 		"variables": {
 			"st": {
+				"type": "String"
+			},
+			"Error Message": {
 				"type": "String"
 			}
 		},

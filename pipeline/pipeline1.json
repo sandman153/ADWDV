@@ -1,0 +1,21 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Generic Load",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Generic Load",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": false
+				}
+			}
+		],
+		"annotations": []
+	}
+}

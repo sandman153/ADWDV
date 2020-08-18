@@ -2,7 +2,7 @@
 	"name": "DVSAT",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Adventure Works Data Vault",
+			"referenceName": "AdventureWorksDataVault",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
