@@ -61,7 +61,6 @@
     <Folder Include="Tables\SAT" />
     <Folder Include="Tables\LINK" />
     <Folder Include="Tables\HUB" />
-    <Folder Include="DacPac" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\HUB\PersonHUB.sql" />
