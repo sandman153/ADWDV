@@ -30,7 +30,7 @@ steps:
   inputs:
     command: 'custom'
     workingDir: '$(Build.Repository.LocalPath)/Build' #replace with the package.json folder
-    customCommand: 'run build validate $(Build.Repository.LocalPath)/subscriptions/$(Subscription)/resourceGroups/$(ResourceGroup)/providers/Microsoft.DataFactory/factories/$(ADFName)'
+    customCommand: 'run build validate $(Build.Repository.LocalPath)/subscriptions/$(SubscriptionId)/resourceGroups/$(ResourceGroup)/providers/Microsoft.DataFactory/factories/$(ADFName)'
   displayName: 'Validate'
 
 # Validate and then generate the ARM template into the destination folder, which is the same as selecting "Publish" from the UX.
@@ -40,7 +40,7 @@ steps:
   inputs:
     command: 'custom'
     workingDir: '$(Build.Repository.LocalPath)/Build' #replace with the package.json folder
-    customCommand: 'run build export $(Build.Repository.LocalPath)/subscriptions/$(Subscription)/resourceGroups/$(ResourceGroup)/providers/Microsoft.DataFactory/factories/$(ADFName) ArmTemplate'
+    customCommand: 'run build export $(Build.Repository.LocalPath)/subscriptions/$(SubscriptionId)/resourceGroups/$(ResourceGroup)/providers/Microsoft.DataFactory/factories/$(ADFName) ArmTemplate'
   displayName: 'Validate and Generate ARM template'
 
 # Publish the artifact to be used as a source for a release pipeline.
