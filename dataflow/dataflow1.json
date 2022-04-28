@@ -15,21 +15,18 @@
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "stringify1"
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
 				"parameters{",
-				"     parameter1 as string[] (['a','b','c','d'])",
+				"     parameter1 as string ('a,b,c,d')",
 				"}",
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 stringify(column1 = array(byNames(array($parameter1))) ? string,",
-				"     format: 'delimited',",
-				"     columnNamesAsHeader: true,",
-				"     columnDelimiter: ',',",
-				"     nullValue: '|') ~> stringify1"
+				"source1 derive(test = split($parameter1, ','),",
+				"          test_b = array(columnNames() )) ~> derivedColumn1"
 			]
 		}
 	}
