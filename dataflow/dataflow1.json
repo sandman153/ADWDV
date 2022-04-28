@@ -20,14 +20,14 @@
 			],
 			"scriptLines": [
 				"parameters{",
-				"     parameter1 as string (['a','b','c','d'])",
+				"     parameter1 as string[] (['a','b','c','d'])",
 				"}",
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 stringify(column1 = $parameter1 ? string,",
+				"source1 stringify(column1 = array(byNames(array($parameter1))) ? string,",
 				"     format: 'delimited',",
-				"     columnNamesAsHeader: false,",
+				"     columnNamesAsHeader: true,",
 				"     columnDelimiter: ',',",
 				"     nullValue: '|') ~> stringify1"
 			]
