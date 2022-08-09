@@ -1,0 +1,93 @@
+{
+	"name": "DataVaultLoad_copy1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "StageSource",
+						"type": "DatasetReference"
+					},
+					"name": "DataVaultSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "DVHUB",
+						"type": "DatasetReference"
+					},
+					"name": "HUBSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "DVSAT",
+						"type": "DatasetReference"
+					},
+					"name": "SATSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "StageSource",
+						"type": "DatasetReference"
+					},
+					"name": "DVHashSource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DVHUB",
+						"type": "DatasetReference"
+					},
+					"name": "HubLoad"
+				},
+				{
+					"dataset": {
+						"referenceName": "DVSAT",
+						"type": "DatasetReference"
+					},
+					"name": "SATLoad"
+				},
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "hashKeys"
+				},
+				{
+					"name": "NewRows"
+				},
+				{
+					"name": "TargetHubKey"
+				},
+				{
+					"name": "NewHubRecords"
+				},
+				{
+					"name": "SatRowsExist"
+				},
+				{
+					"name": "InsertHubRows"
+				},
+				{
+					"name": "NewSATRecords"
+				},
+				{
+					"name": "Select1"
+				},
+				{
+					"name": "TargetSatKeys"
+				},
+				{
+					"name": "SelectedColsHash"
+				},
+				{
+					"name": "GenerateHash"
+				}
+			],
+			"script": "parameters{\n\thashVal as string,\n\tTargetID as string,\n\thashDiff as string,\n\tBK as string ('Id,versionnumber,brf_courttypename,brf_casetypename,brf_casenumber')\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false) ~> DataVaultSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> HUBSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SATSource\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false) ~> DVHashSource\nDataVaultSource derive(HKey = toString(sha2(256, byName(toString($hashVal)))),\n\t\tLoadDateTime = currentTimestamp(),\n\t\thashDiffValue = sha2(512, columns()),\n\t\thash_test = sink1#lookup(split($BK, ','))) ~> hashKeys\nhashKeys, TargetHubKey exists(hashKeys@HKey == TargetHubKey@HKey,\n\tnegate:true,\n\tbroadcast: 'auto')~> NewRows\nHUBSource derive(HKey = toString(byName(toString($TargetID)))) ~> TargetHubKey\nInsertHubRows select(mapColumn(\n\t\teach(match(name==$hashVal)),\n\t\teach(match(name=='HKey'),\n\t\t\treplace($$,'HKey',$TargetID) = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> NewHubRecords\nhashKeys, TargetSatKeys exists(hashKeys@HKey == TargetSatKeys@HKey\n\t&& hashKeys@LoadDateTime == TargetSatKeys@LoadDateTime\n\t&& hashDiffValue == hashID,\n\tnegate:true,\n\tbroadcast: 'auto')~> SatRowsExist\nNewRows alterRow(insertIf(true())) ~> InsertHubRows\nSatRowsExist alterRow(insertIf(true())) ~> NewSATRecords\nNewSATRecords select(mapColumn(\n\t\teach(match(name=='HKey'),\n\t\t\treplace($$,'HKey',$TargetID) = $$),\n\t\teach(match(name=='hashDiffValue'),\n\t\t\treplace($$,'hashDiffValue',$hashDiff) = $$),\n\t\teach(match(name!=$hashVal))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSATSource derive(HKey = byName(toString($TargetID)),\n\t\tLoadDateTime = toTimestamp(byName('LoadDateTime')),\n\t\thashID = byName(toString($hashDiff))) ~> TargetSatKeys\nDVHashSource select(mapColumn(\n\t\teach(match(in(array($hashDiff), name) ))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectedColsHash\nSelectedColsHash derive(hash = sha2Binary(512, concat('|', reduce(array(toString(columns())), '|', #acc + #item, #result), '|'), '|')) ~> GenerateHash\nNewHubRecords sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 2,\n\terrorHandlingOption: 'stopOnFirstError') ~> HubLoad\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 2,\n\terrorHandlingOption: 'stopOnFirstError') ~> SATLoad\nGenerateHash sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tkeys:(split($BK, ',')),\n\tstore: 'cache',\n\tformat: 'inline',\n\toutput: true,\n\tsaveOrder: 1) ~> sink1"
+		}
+	}
+}
