@@ -16,6 +16,16 @@
 				}
 			}
 		],
+		"variables": {
+			"Environment": {
+				"type": "String",
+				"defaultValue": "Dev"
+			},
+			"StorageLocation": {
+				"type": "String",
+				"defaultValue": "https://storage.microsoft.com/xxxxxxx"
+			}
+		},
 		"annotations": []
 	}
 }
