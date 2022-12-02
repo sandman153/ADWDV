@@ -1,0 +1,7 @@
+{
+	"name": "Self-HostedTest",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "Test For Self-Hosted RunTIme"
+	}
+}
